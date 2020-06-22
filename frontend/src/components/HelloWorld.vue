@@ -39,11 +39,11 @@ export default {
     msg: String
   },
   mounted() {
-    axios.get('api/layout')
+    axios.get('/api/layout')
       .then((res) => {
         console.log(res.data);
       });
-  },
+  }
 }
 </script>
 
