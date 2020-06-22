@@ -15,6 +15,10 @@ class CreateOrderTable extends Migration
     {
         Schema::create('order', function (Blueprint $table) {
             $table->id();
+
+            $table->char('name', 32);
+            $table->text('desc')->nullable();
+
             $table->timestamps();
         });
     }
