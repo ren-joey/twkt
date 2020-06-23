@@ -20,6 +20,8 @@ Route::get('layout', function ()
     return response(['success' => 'Y'], Response::HTTP_OK);
 });
 
+Route::post('order', 'OrderController@create');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

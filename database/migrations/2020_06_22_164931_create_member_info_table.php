@@ -32,6 +32,7 @@ class CreateMemberInfoTable extends Migration
             $table->text('service')->nullable();                // 公司營業項目(選項)
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

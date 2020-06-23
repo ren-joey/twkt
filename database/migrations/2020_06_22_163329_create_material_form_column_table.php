@@ -22,6 +22,7 @@ class CreateMaterialFormColumnTable extends Migration
             $table->text('type');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
