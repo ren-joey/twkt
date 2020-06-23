@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommentTable extends Migration
+class CreateQuotationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateCommentTable extends Migration
      */
     public function up()
     {
-        Schema::create('comment', function (Blueprint $table) {
+        Schema::create('quotations', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger('create_by');
             $table->bigInteger('material_id');
-            $table->bigInteger('quote_id');
-            $table->bigInteger('order_id');
-            $table->text('content');
+            $table->bigInteger('user_information_id');
+            $table->integer('price');
+            $table->char('currency')->default('TWD');
+            $table->date('arrival_date');
 
             $table->timestamps();
             $table->softDeletes();
@@ -34,6 +34,6 @@ class CreateCommentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comment');
+        Schema::dropIfExists('quotations');
     }
 }

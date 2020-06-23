@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMaterialTable extends Migration
+class CreateMaterialsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateMaterialTable extends Migration
      */
     public function up()
     {
-        Schema::create('material', function (Blueprint $table) {
+        Schema::create('materials', function (Blueprint $table) {
             $table->id();
 
             $table->char('serial_number', 32)->unique()->nullable();    // 1原料編號
             $table->char('name', 32);                                   // *2原料名稱
             $table->char('moq', 32);                                    // *3MOQ
-            $table->bigInteger('quote_id')->nullable();                 // 4報價 5報價日期
+            // $table->bigInteger('quote_id')->nullable();                 // 4報價 5報價日期
             $table->text('spec_1');                                     // *6規格一
             $table->text('spec_2');                                     // *7規格二
             $table->char('origin_name', 32)->nullable();                // 8原廠名稱
@@ -51,6 +51,6 @@ class CreateMaterialTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('material');
+        Schema::dropIfExists('materials');
     }
 }

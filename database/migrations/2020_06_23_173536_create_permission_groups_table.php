@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMaterialFormColumnTable extends Migration
+class CreatePermissionGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateMaterialFormColumnTable extends Migration
      */
     public function up()
     {
-        Schema::create('material_form_column', function (Blueprint $table) {
+        Schema::create('permission_groups', function (Blueprint $table) {
             $table->id();
 
-            $table->text('col_name');
-            $table->text('tw_name');
-            $table->text('col_option');
-            $table->text('type');
+            $table->char('col_name', 32)->unique();
+            $table->char('tw_name', 32);
+            $table->text('permission');
 
             $table->timestamps();
             $table->softDeletes();
@@ -33,6 +32,6 @@ class CreateMaterialFormColumnTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('material_form_column');
+        Schema::dropIfExists('permission_groups');
     }
 }

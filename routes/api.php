@@ -15,6 +15,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
+|--------------------------------------------------------------------------
+| OAuth Routes
+|--------------------------------------------------------------------------
+|
+| Create API Rest with Laravel 7.X Passport Authentication And Implement Refresh Token
+| https://dev.to/azibom/create-api-rest-with-laravel-7-x-passport-authentication-and-implement-refresh-token-part-1-43ja
+*/
+Route::post('login', 'UserController@login');
+Route::post('register', 'UserController@register');
+Route::post('refreshtoken', 'UserController@refreshToken');
+
+Route::get('unauthorized', 'UserController@unauthorized')->name('unauthorized');
+Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function() {
+    Route::post('logout', 'UserController@logout');
+    Route::post('details', 'UserController@details');
+    Route::post('test', function() {
+        return 'test';
+    })->middleware('verified');
+});
+
 Route::get('layout', function ()
 {
     return response(['success' => 'Y'], Response::HTTP_OK);

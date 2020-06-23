@@ -3,6 +3,9 @@
         "laravel",
         "cuzo",
         "wechat",
-        "whatsapp"
+        "whatsapp",
+        "Unauthorised",
+        "Diactoros",
+        "refreshtoken"
     ]
 }
