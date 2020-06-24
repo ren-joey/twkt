@@ -76,6 +76,7 @@
         "Helvetica",
         "Arial",
         "grayscale",
-        "noopener"
+        "noopener",
+        "axios"
     ]
 }

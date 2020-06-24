@@ -29,8 +29,8 @@ Route::post('refreshtoken', 'UserController@refreshToken');
 
 Route::get('unauthorized', 'UserController@unauthorized')->name('unauthorized');
 Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function() {
+    Route::get('details', 'UserController@details');
     Route::post('logout', 'UserController@logout');
-    Route::post('details', 'UserController@details');
     Route::post('test', function() {
         return 'test';
     })->middleware('verified');

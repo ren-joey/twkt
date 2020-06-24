@@ -20,18 +20,19 @@ class UserController extends Controller
             $oClient = OClient::where('password_client', 1)->first();
             return $this->getTokenAndRefreshToken($oClient, request('email'), request('password'));
         }
-        return response()->json(['error' => 'Unauthorised'], 401);
+        return response(['message' => '帳號或密碼錯誤'], Response::HTTP_BAD_REQUEST);
     }
 
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
+            'serial_number' => 'required|max:32',
             'name' => 'required|max:32',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response($validator->errors(), Response::HTTP_BAD_REQUEST);
         }
 
         $password = $request->password;
@@ -58,7 +59,9 @@ class UserController extends Controller
         $response = $http->request('POST', route('passport.token'), $params);
 
         $result = json_decode((string) $response->getBody(), true);
-        return response()->json($result, $this->successStatus);
+        return response()->json($result, $this->successStatus)
+                ->withCookie(cookie('access_token', $result['access_token'], 60))
+                ->withCookie(cookie('refresh_token', $result['refresh_token'], 1440));
     }
 
     public function refreshToken(Request $request) {
@@ -76,7 +79,10 @@ class UserController extends Controller
         ];
         try {
             $response = $http->request('POST', route('passport.token'), $params);
-            return json_decode((string) $response->getBody(), true);
+            $result = json_decode((string) $response->getBody(), true);
+            return response($result, $this->successStatus)
+                ->withCookie(cookie('access_token', $result['access_token'], 60))
+                ->withCookie(cookie('refresh_token', $result['refresh_token'], 1440));
         } catch (Exception $e) {
             return response([
                 'message' => '您沒有權限進行此操作'
@@ -86,7 +92,8 @@ class UserController extends Controller
 
     public function details() {
         $user = Auth::user();
-        return response()->json($user, $this->successStatus);
+        $user = User::find($user->id);
+        return response($user, $this->successStatus);
     }
 
     public function logout(Request $request) {
