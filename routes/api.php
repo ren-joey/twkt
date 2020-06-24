@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
@@ -30,11 +31,15 @@ Route::post('refreshtoken', 'UserController@refreshToken');
 Route::get('unauthorized', 'UserController@unauthorized')->name('unauthorized');
 Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function() {
     Route::get('details', 'UserController@details');
-    Route::post('logout', 'UserController@logout');
-    Route::post('test', function() {
+    Route::get('logout', 'UserController@logout');
+    Route::get('layout', 'LayoutController@all');
+    Route::get('materials', 'MaterialController@index');
+    Route::post('email-verify', function() {
         return 'test';
     })->middleware('verified');
 });
+
+Route::get('test', 'UserController@test');
 
 Route::get('layout', function ()
 {

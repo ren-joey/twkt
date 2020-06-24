@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\PermissionGroup;
 use App\User;
+use App\UserInformation;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -59,7 +61,10 @@ class UserController extends Controller
         $response = $http->request('POST', route('passport.token'), $params);
 
         $result = json_decode((string) $response->getBody(), true);
-        return response()->json($result, $this->successStatus)
+        // return response()->json($result, $this->successStatus)
+        $user = Auth::user();
+        $user->userInformation->permissionGroup;
+        return response($user, $this->successStatus)
                 ->withCookie(cookie('access_token', $result['access_token'], 60))
                 ->withCookie(cookie('refresh_token', $result['refresh_token'], 1440));
     }
@@ -92,7 +97,7 @@ class UserController extends Controller
 
     public function details() {
         $user = Auth::user();
-        $user = User::find($user->id);
+        $user->userInformation->permissionGroup;
         return response($user, $this->successStatus);
     }
 
@@ -100,12 +105,27 @@ class UserController extends Controller
         $request->user()->token()->revoke();
         return response([
             'message' => '已成功登出'
-        ], Response::HTTP_OK);
+        ], Response::HTTP_OK)
+            ->withCookie(cookie('access_token', '', -1))
+            ->withCookie(cookie('refresh_token', '', -1));;
     }
 
     public function unauthorized() {
         return response([
             'message' => '您沒有權限進行此操作'
         ], Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function test()
+    {
+        $permissionGroup = PermissionGroup::where('col_name', '=', 'user')->first();
+        $userInformation = $permissionGroup->userInformation;
+
+        foreach($userInformation as $each)
+        {
+            $each->user;
+        }
+
+        return response($userInformation);
     }
 }

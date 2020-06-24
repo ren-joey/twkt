@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Closure;
+use Illuminate\Http\Response;
 
 class Authenticate extends Middleware
 {
@@ -16,6 +17,13 @@ class Authenticate extends Middleware
         if ($request->cookie('refresh_token')) {
             $request->headers->set('Refreshtoken', $request->cookie('refresh_token'));
         }
+
+        if (!$request->cookie('access_token')
+            && !$request->header('Authorization')) {
+                return response([
+                    'message' => '用戶尚未登入'
+                ], Response::HTTP_UNAUTHORIZED);
+            }
 
         $this->authenticate($request, $guards);
         return $next($request);

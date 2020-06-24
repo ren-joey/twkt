@@ -10,4 +10,9 @@ class UserInformation extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function permissionGroup()
+    {
+        return $this->belongsTo('App\PermissionGroup');
+    }
 }
