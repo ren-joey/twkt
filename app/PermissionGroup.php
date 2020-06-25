@@ -12,4 +12,9 @@ class PermissionGroup extends Model
     {
         return $this->hasMany('App\UserInformation');
     }
+
+    public function menus()
+    {
+        return $this->belongsToMany('App\Menu');
+    }
 }

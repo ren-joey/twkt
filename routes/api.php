@@ -39,12 +39,12 @@ Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function(
     })->middleware('verified');
 });
 
-Route::get('test', 'UserController@test');
+// Route::get('test', 'UserController@test');
 
-Route::get('layout', function ()
-{
-    return response(['success' => 'Y'], Response::HTTP_OK);
-});
+// Route::get('layout', function ()
+// {
+//     return response(['success' => 'Y'], Response::HTTP_OK);
+// });
 
 Route::post('order', 'OrderController@create');
 

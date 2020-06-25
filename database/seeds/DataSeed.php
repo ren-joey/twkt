@@ -1,26 +1,49 @@
 <?php
 
 class DataSeed {
+    const menus = [
+        [
+            'col_name' => 'materials',
+            'tw_name' => '原物料'
+        ],
+        [
+            'col_name' => 'orders',
+            'tw_name' => '需求單'
+        ],
+        [
+            'col_name' => 'quotations',
+            'tw_name' => '報價單'
+        ],
+        [
+            'col_name' => 'settings',
+            'tw_name' => '設定'
+        ]
+    ];
+
     const permissionGroups = [
         [
             'col_name' => 'admin',
             'tw_name' => '管理員',
-            'permission' => ''
+            'permission' => '',
+            'menus' => ['materials', 'orders', 'quotations', 'settings']
         ],
         [
             'col_name' => 'agent',
             'tw_name' => '專員',
-            'permission' => ''
+            'permission' => '',
+            'menus' => ['materials', 'orders', 'quotations', 'settings']
         ],
         [
             'col_name' => 'company',
             'tw_name' => '廠商',
-            'permission' => ''
+            'permission' => '',
+            'menus' => ['materials', 'quotations', 'settings']
         ],
         [
             'col_name' => 'user',
             'tw_name' => '用戶',
-            'permission' => ''
+            'permission' => '',
+            'menus' => ['materials', 'orders', 'settings']
         ],
     ];
 

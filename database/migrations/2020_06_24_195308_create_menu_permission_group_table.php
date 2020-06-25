@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePermissionGroupsTable extends Migration
+class CreateMenuPermissionGroupTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreatePermissionGroupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('permission_groups', function (Blueprint $table) {
+        Schema::create('menu_permission_group', function (Blueprint $table) {
             $table->id();
 
-            $table->char('col_name', 32)->unique();
-            $table->char('tw_name', 32);
-            $table->text('permission')->nullable();
+            $table->bigInteger('permission_group_id');
+            $table->bigInteger('menu_id');
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -32,6 +30,6 @@ class CreatePermissionGroupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permission_groups');
+        Schema::dropIfExists('menu_permission_group');
     }
 }
