@@ -12,7 +12,8 @@ module.exports = {
         },
         proxy: {
             '/api': {
-                target: 'http://192.168.64.4',
+                // target: 'http://192.168.64.4',
+                target: 'http://127.0.0.1',
                 secure: false,
                 changeOrigin: true
             }
@@ -28,5 +29,4 @@ module.exports = {
     indexPath: process.env.NODE_ENV === 'production'
         ? '../resources/views/index.blade.php'
         : 'index.html'
-}
-
+};

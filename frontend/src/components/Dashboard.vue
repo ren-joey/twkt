@@ -6,18 +6,40 @@
             <button type="submit" @click.prevent="submit">提交</button>
         </div>
         <div v-else-if="user.id">
-            {{ user }}
             <button @click.prevent="logout">登出</button>
         </div>
         <br />
-        CREATE ORDER:
-        <input type="text" v-model="order.name" />
-        <textarea v-model="order.description" />
-        <br />
-        <template v-if="materials.length > 0">
-            <div v-for="material in materials" :key="material.serial_number">
-                {{ material.name }}
+        <template v-if="layout.menus.length > 0 && user.id">
+            <div v-for="menu in layout.menus"
+                 :key="menu.col_name"
+                 @click="activePage = menu.col_name"
+            >
+                {{ menu.tw_name }}
             </div>
+        </template>
+        <br />
+        <template v-if="activePage === 'orders' && user.id">
+            CREATE ORDER:
+            <br />
+            <input type="text" v-model="order.name" />
+            <br />
+            <textarea v-model="order.description" />
+            <br />
+            <template v-if="materials.length > 0">
+                <div v-for="material in materials" :key="material.serial_number">
+                    {{ material.name }}
+                </div>
+            </template>
+        </template>
+        <template v-else-if="activePage === 'materials'">
+            MATERIAL LIST:
+            <br />
+            <div v-for="material in materials" :key="material.serial_number">
+                {{ material }}
+            </div>
+        </template>
+        <template v-else-if="activePage === 'settings'">
+            {{ user }}
         </template>
     </div>
 </template>
@@ -33,6 +55,7 @@ export default {
         }
     },
     data: () => ({
+        activePage: 'index',
         email: '',
         password: '',
         user: undefined,
@@ -40,6 +63,9 @@ export default {
             name: '',
             description: '',
             materials: []
+        },
+        layout: {
+            menus: []
         },
         materials: []
     }),
@@ -57,7 +83,7 @@ export default {
     mounted() {
         axios.get('/api/details')
             .then((res) => {
-                this.fetchMaterials();
+                this.loginSuccessfulHandler();
                 this.user = res.data;
             }).catch(() => {
                 this.user = undefined;
@@ -73,17 +99,28 @@ export default {
                     password: this.password
                 }
             }).then((res) => {
-                this.fetchMaterials();
+                this.loginSuccessfulHandler();
                 this.user = res.data;
             });
+        },
+        loginSuccessfulHandler() {
+            this.fetchLayout();
+            this.fetchMaterials();
         },
         logout() {
             axios({
                 method: 'GET',
                 url: '/api/logout'
             }).then(() => {
-                this.fetchMaterials();
                 this.user = undefined;
+            });
+        },
+        fetchLayout() {
+            axios({
+                method: 'GET',
+                url: '/api/layout'
+            }).then((res) => {
+                this.layout = res.data;
             });
         },
         fetchMaterials() {
