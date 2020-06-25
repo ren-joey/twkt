@@ -1,0 +1,18 @@
+{
+  "message": "hello i18n !!",
+  "hello": "你好",
+  "COMPANY_TITLE": "台灣康田",
+  "LOGIN_SUBTITLE": "WELCOME TO",
+  "LOGIN_TITLE": "原物料訂購系統",
+  "LOGIN_PLEASE_LOGIN": "請登入",
+  "LOGIN_REMEMBER_ME": "記住我",
+  "LOGIN_CONFIRM": "登入",
+  "CANCEL": "取消",
+  "LOGIN_REGISTER": "申請會員",
+  "LOGIN_ALERT_USER_INPUT_ERROR": "您輸入的資訊有誤，請重新確認",
+  "LOGIN_EMAIL_RULE_1": "E-mail 不可空白",
+  "LOGIN_EMAIL_RULE_2": "必須是有效的E-mail",
+  "LOGIN_PW_RULE_1": "Password 不可空白",
+  "LOGIN_PW_RULE_2": "Password 至少需6個字元",
+  "CONFIRM": "確定"
+}

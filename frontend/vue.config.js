@@ -24,6 +24,15 @@ module.exports = {
     // 在 package.json 也要調整 "build" 這個 script
     outputDir: '../public',
 
+    pluginOptions: {
+        i18n: {
+            locale: 'zh-TW',
+            fallbackLocale: 'zh-TW',
+            localeDir: 'locales',
+            enableInSFC: true
+        }
+    },
+
     // 開發階段修改 index.html 來讓 js/css 可以作用
     // 上線階段則會修改 Laravel 的樣版
     indexPath: process.env.NODE_ENV === 'production'

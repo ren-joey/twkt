@@ -1,0 +1,8 @@
+{
+    "message": "hello i18n !!",
+    "hello": "hello",
+    "LOGIN_EMAIL_RULE_1": "E-mail is required",
+    "LOGIN_EMAIL_RULE_2": "E-mail must be valid",
+    "LOGIN_PW_RULE_1": "Password is required",
+    "LOGIN_PW_RULE_2": "At least 6 characters"
+}
