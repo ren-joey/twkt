@@ -14,7 +14,7 @@ class MenusTableSeeder extends Seeder
     {
         foreach(DataSeed::menus as $menuData)
         {
-            $existMenu = Menu::where('col_name', '='. $menuData['col_name'])->first();
+            $existMenu = Menu::where('col_name', '=', $menuData['col_name'])->first();
             if (!$existMenu)
             {
                 $menu = Menu::create($menuData);

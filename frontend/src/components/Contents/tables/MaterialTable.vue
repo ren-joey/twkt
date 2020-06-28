@@ -8,19 +8,22 @@
                 <v-icon class="mr-2">mdi-semantic-web</v-icon>
                 {{ subtitle }}
             </div>
-            <div class="mr-4">
-                <v-btn class="mr-4"
+            <div class="mr-4"
+                 v-if="PermissionName !== 'user'
+                     && PermissionName !== 'guest'"
+            >
+                <!-- <v-btn class="mr-4"
                        icon
                        small
                        :disabled="selected.length === 0"
                 >
                     <v-icon>mdi-trash-can-outline</v-icon>
-                </v-btn>
+                </v-btn> -->
                 <v-btn fab
                        dark
                        color="pink"
                        small
-                       @click="bus.$emit('dialogAddMaterial', id)"
+                       @click="bus.$emit('addMaterial', id)"
                 >
                     <v-icon>mdi-plus</v-icon>
                 </v-btn>
@@ -28,27 +31,18 @@
         </v-card-title>
         <v-card-text>
             <v-divider />
-            <!-- <v-data-table
-                        v-model="selected"
-                        :headers="headers"
-                        :items="materials"
-                        :singleSelect="singleSelect"
-                        :singleExpand="singleExpand"
-                        :expanded.sync="expanded"
-                        showExpand
-                        itemKey="name"
-                        showSelect
-                        class="elevation-1"
-                    > -->
             <v-data-table
                 v-model="selected"
                 :headers="headers"
-                :items="materials"
+                :items="Materials"
                 :singleExpand="singleExpand"
                 :expanded.sync="expanded"
                 showExpand
-                itemKey="material_id"
-                showSelect
+                itemKey="serial_number"
+                @click:row="rowClickHandler"
+                :showSelect="
+                    PermissionName === 'agent'
+                        || PermissionName === 'admin'"
             >
                 <template v-slot:top>
                     <v-dialog v-model="dialog" maxWidth="500px">
@@ -61,7 +55,7 @@
                                         New Item
                                     </v-btn>
                                 </template> -->
-                        <v-card :loading="fetching.editMaterial === 'Y'">
+                        <v-card :loading="Fetching.actionEditMaterial === 'Y'">
                             <v-card-title>
                                 <span class="headline">{{ formTitle }}</span>
                             </v-card-title>
@@ -121,7 +115,11 @@
                         </v-card>
                     </v-dialog>
                 </template>
-                <template v-slot:item.actions="{ item }">
+                <template v-if="
+                              PermissionName !== 'user'
+                                  && PermissionName !== 'guest'"
+                          v-slot:item.actions="{ item }"
+                >
                     <v-icon
                         small
                         class="mr-2"
@@ -136,23 +134,23 @@
                         mdi-delete
                     </v-icon>
                 </template>
-                <template v-slot:expanded-item="{ headers, item }">
+                <template v-slot:expanded-item="{ item }">
                     <td :colspan="headers.length">
                         <v-row>
                             <v-col cols="4">
                                 專利
                                 <v-divider />
-                                {{ item.material_patent }}
+                                {{ item.patent }}
                             </v-col>
                             <v-col cols="4">
                                 認證
                                 <v-divider />
-                                {{ item.material_certification }}
+                                {{ item.certification }}
                             </v-col>
                             <v-col cols="4">
                                 臨床研究/文獻
                                 <v-divider />
-                                {{ item.material_clinic }}
+                                {{ item.report }}
                             </v-col>
                         </v-row>
                     </td>
@@ -164,7 +162,7 @@
 
 <script>
 import bus from '@/bus';
-import config from '../../config';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
     props: {
@@ -175,23 +173,18 @@ export default {
         subtitle: {
             type: String,
             default: ''
-        },
-        materials: {
-            type: Array,
-            default: () => ([])
         }
     },
     data: () => ({
         bus,
-        ...config,
         dialog: false,
-        items: [
-            {
-                text: '原物料',
-                disabled: true,
-                href: 'breadcrumbs_dashboard'
-            }
-        ],
+        // items: [
+        //     {
+        //         text: '原物料',
+        //         disabled: true,
+        //         href: 'breadcrumbs_dashboard'
+        //     }
+        // ],
         singleSelect: false,
         selected: [],
         singleExpand: false,
@@ -213,17 +206,53 @@ export default {
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
-        }
+        },
+        headers() {
+            if (this.PermissionName === 'user'
+                || this.PermissionName === 'guest') {
+                return [
+                    { text: '編號', align: 'start', value: 'serial_number' },
+                    { text: '原料名稱', value: 'name' },
+                    { text: '來源', value: 'origin_name' },
+                    { text: '規格1', value: 'spec_1' },
+                    { text: '規格2', value: 'spec_2' },
+                    { text: '產地', value: 'origin' },
+                    { text: '功能', value: 'function' },
+                    { text: '', value: 'data-table-expand' }
+                ];
+            }
+            return [
+                { text: '編號', align: 'start', value: 'serial_number' },
+                { text: '原料名稱', value: 'name' },
+                { text: '來源', value: 'origin_name' },
+                { text: '規格1', value: 'spec_1' },
+                { text: '規格2', value: 'spec_2' },
+                { text: '產地', value: 'origin' },
+                // { text: '專利', value: 'material_patent' },
+                // { text: '認證', value: 'material_certification' },
+                // { text: '臨床研究/文獻', value: 'material_clinic' },
+                { text: '功能', value: 'function' },
+                { text: '操作', value: 'actions', sortable: false },
+                { text: '', value: 'data-table-expand' }
+            ];
+        },
+        ...mapGetters({
+            PermissionName: 'getPermissionName'
+        }),
+        ...mapState(['Fetching', 'Materials', 'UserInfo'])
     },
     watch: {
         dialog(val) {
             if (!val) this.close();
         }
     },
+    mounted() {
+        if (this.Materials.length === 0) this.$store.dispatch('actionFetchMaterials');
+    },
     methods: {
         editItem(item) {
             this.editedIndex = this.materials.indexOf(item);
-            this.editedItem = Object.assign({}, item);
+            this.editedItem = { ...item };
             this.dialog = true;
         },
         deleteItem(item) { // eslint-disable-line
@@ -234,7 +263,7 @@ export default {
         close() {
             this.dialog = false;
             setTimeout(() => {
-                this.editedItem = Object.assign({}, this.defaultItem);
+                this.editedItem = { ...this.defaultItem };
                 this.editedIndex = -1;
             }, 300);
         },
@@ -250,6 +279,9 @@ export default {
                 }
                 this.close();
             }, 2000);
+        },
+        rowClickHandler(material) {
+            this.$router.push({ name: 'material', params: { material_id: material.id } });
         }
     }
 };

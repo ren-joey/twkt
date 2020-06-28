@@ -90,4 +90,8 @@ class DataSeed {
         ['serial_number' => 'CE01-004','name' => '大同中醫診所','tax_id' => NULL,'phone' => '','fax' => '','address' => '','email' => 'CE01-004@mail.com','line_id' => '','wechat_id' => '','whatsapp_id' => '','url' => '','liaison_name' => '歐美琪','liaison_phone' => '','service' => ''],
         ['serial_number' => 'CE01-005','name' => '正德中醫診所','tax_id' => NULL,'phone' => '07-3844707','fax' => '','address' => '高雄市三民區建興路213號','email' => 'CE01-005@mail.com','line_id' => '','wechat_id' => '','whatsapp_id' => '','url' => '','liaison_name' => '','liaison_phone' => '','service' => ''],
     ];
+
+    const admins = [
+        ['serial_number' => 'twkt.bio','name' => 'twkt.bio','tax_id' => NULL,'phone' => '','fax' => '','address' => '','email' => 'twkt.bio@gmail.com','line_id' => '','wechat_id' => '','whatsapp_id' => '','url' => '','liaison_name' => 'cuishi guo','liaison_phone' => '','service' => ''],
+    ];
 }

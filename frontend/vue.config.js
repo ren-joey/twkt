@@ -13,7 +13,7 @@ module.exports = {
         proxy: {
             '/api': {
                 // target: 'http://192.168.64.4',
-                target: 'http://127.0.0.1',
+                target: 'http://218.161.122.79',
                 secure: false,
                 changeOrigin: true
             }
@@ -32,10 +32,7 @@ module.exports = {
             enableInSFC: true
         }
     },
-
-    // 開發階段修改 index.html 來讓 js/css 可以作用
-    // 上線階段則會修改 Laravel 的樣版
-    indexPath: process.env.NODE_ENV === 'production'
-        ? '../resources/views/index.blade.php'
-        : 'index.html'
+    transpileDependencies: [
+        'vuetify'
+    ]
 };

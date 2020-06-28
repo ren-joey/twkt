@@ -5,24 +5,28 @@
         dark
         v-bind="headerAttrs"
     >
-        <v-app-bar-nav-icon v-if="InitData.is_login === 'Y'" @click.stop="toggleNavigation" />
+        <v-app-bar-nav-icon v-if="UserInfo && UserInfo.is_login === 'Y'" @click.stop="toggleNavigation" />
         <v-toolbar-title
             style="width: 300px"
             class="ml-0 pl-4"
         >
-            <span class="hidden-sm-and-down">
+            <router-link tag="span"
+                         class="hidden-sm-and-down"
+                         :to="{ name: 'index' }"
+                         style="cursor: pointer;"
+            >
                 {{ $t('COMPANY_TITLE') }}
-            </span>
+            </router-link>
         </v-toolbar-title>
-        <template v-if="InitData.is_login === 'Y'">
-            <v-text-field
+        <template v-if="UserInfo && UserInfo.is_login === 'Y'">
+            <!-- <v-text-field
                 flat
                 soloInverted
                 hideDetails
                 prependInnerIcon="mdi-magnify"
                 label="Search"
                 class="hidden-sm-and-down"
-            />
+            /> -->
             <v-spacer />
             <v-menu offsetY
                     origin="top center"
@@ -78,7 +82,7 @@
                 <v-avatar
                     size="32px"
                     item
-                >
+                >InitData
                     <v-img
                         src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
                         alt="Vuetify"
@@ -95,13 +99,15 @@ import bus from '@/bus';
 
 export default {
     computed: {
-        ...mapState(['InitData']),
+        ...mapState(['UserInfo']),
         headerAttrs() {
-            const { is_login, permission_group } = this.InitData;
+            const { is_login } = this.UserInfo;
             if (is_login === 'N') return { color: 'blue darken-3' };
-            if (permission_group === 'guest'
-                || permission_group === 'user') return { color: 'green darken-1' };
-            if (permission_group === 'manufactory') return { color: 'teal darken-1' };
+
+            const permissionName = this.UserInfo.permission_group.col_name;
+            if (permissionName === 'guest'
+                || permissionName === 'user') return { color: 'green darken-1' };
+            if (permissionName === 'company') return { color: 'teal darken-1' };
             return { color: 'blue darken-3' };
         }
     },

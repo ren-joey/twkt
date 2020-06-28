@@ -16,7 +16,7 @@ class CreateUserInformationTable extends Migration
         Schema::create('user_information', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger('user_id');
+            // $table->bigInteger('user_id');
             $table->char('serial_number', 32)->unique();        // 客戶編號
             $table->char('name', 32);                           // 客戶名稱
             $table->char('tax_id', 32)->unique()->nullable();   // 統一編號

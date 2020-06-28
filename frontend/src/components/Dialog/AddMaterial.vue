@@ -325,7 +325,7 @@ export default {
         }
     },
     mounted() {
-        bus.$on('dialogAddMaterial', (material_id) => {
+        bus.$on('addMaterial', (material_id) => {
             this.dialog = !this.dialog;
 
             if (material_id !== undefined && material_id !== '') {

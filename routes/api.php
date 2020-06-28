@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LayoutController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -30,14 +32,27 @@ Route::post('refreshtoken', 'UserController@refreshToken');
 
 Route::get('unauthorized', 'UserController@unauthorized')->name('unauthorized');
 Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function() {
-    Route::get('details', 'UserController@details');
+    Route::post('create', 'UserController@create');
+    Route::get('check-login', 'UserController@details');
     Route::get('logout', 'UserController@logout');
     Route::get('layout', 'LayoutController@all');
     Route::get('materials', 'MaterialController@index');
+    Route::get('material/{material_id?}', 'MaterialController@get');
+    Route::get('users', 'UserController@all');
+    Route::get('user/{id?}', 'UserController@get');
+    Route::post('user/{id?}', 'UserController@userPassword'); // update user password
+    Route::patch('user/{id?}', 'UserController@update'); // update user_information
     Route::post('email-verify', function() {
         return 'test';
     })->middleware('verified');
 });
+
+Route::get('permission-groups', 'PermissionGroupController@all');
+
+// Route::get('user-form', 'UserController@form');
+
+Route::get('check-serial-number', 'LayoutController@serialNumberChecker');
+Route::get('get-serial-number', 'LayoutController@getSerialNumber');
 
 // Route::get('test', 'UserController@test');
 

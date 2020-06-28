@@ -1,5 +1,5 @@
 <template>
-    <v-content>
+    <v-main>
         <v-container>
             <v-breadcrumbs :items="items">
                 <template v-slot:divider>
@@ -42,7 +42,7 @@
                                            dark
                                            color="pink"
                                            small
-                                           @click="bus.$emit('dialogAddMaterial')"
+                                           @click="bus.$emit('addMaterial')"
                                     >
                                         <v-icon>mdi-plus</v-icon>
                                     </v-btn>
@@ -58,7 +58,7 @@
                         fab
                         fixed
                         right
-                        @click="bus.$emit('dialogAddMaterial')"
+                        @click="bus.$emit('addMaterial')"
                     >
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
@@ -100,7 +100,7 @@
         </v-navigation-drawer>
         -->
         <DialogAddMaterial />
-    </v-content>
+    </v-main>
 </template>
 
 <script>

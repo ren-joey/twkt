@@ -21,8 +21,8 @@ class Authenticate extends Middleware
         if (!$request->cookie('access_token')
             && !$request->header('Authorization')) {
                 return response([
-                    'message' => '用戶尚未登入'
-                ], Response::HTTP_UNAUTHORIZED);
+                    'is_login' => 'N'
+                ], Response::HTTP_OK);
             }
 
         $this->authenticate($request, $guards);
