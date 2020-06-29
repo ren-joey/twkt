@@ -60,6 +60,8 @@ router.beforeEach((to, from, next) => {
                 else if (to.name === 'login'
                     && data.is_login === 'Y') next({ name: 'index' });
                 else next();
+            }).catch(() => {
+                next({ name: 'login' });
             });
     } else if (UserInfo.is_login === 'Y') {
         if (to.name === 'login') next({ name: 'index' });

@@ -16,7 +16,12 @@ export default new Vuex.Store({
     getters: {
         getPage: (state) => state.Page,
         getPermissionName: (state) => state.UserInfo.permission_group.col_name,
-        getUserInfo: (state) => state.UserInfo
+        getUserInfo: (state) => state.UserInfo,
+        getCompleteMaterials: (state) => state.Materials.filter((m) => m.status === 'complete'),
+        getEditMaterials: (state) => state.Materials.filter((m) => m.status === 'edit'),
+        getVerifyMaterials: (state) => state.Materials.filter((m) => m.status === 'verify'),
+        getConfirmMaterials: (state) => state.Materials.filter((m) => m.status === 'confirm'),
+        getIncompleteMaterials: (state) => state.Materials.filter((m) => m.status !== 'complete')
     },
     mutations: {
         /* eslint-disable no-param-reassign */

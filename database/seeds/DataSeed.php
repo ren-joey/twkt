@@ -92,6 +92,6 @@ class DataSeed {
     ];
 
     const admins = [
-        ['serial_number' => 'twkt.bio','name' => 'twkt.bio','tax_id' => NULL,'phone' => '','fax' => '','address' => '','email' => 'twkt.bio@gmail.com','line_id' => '','wechat_id' => '','whatsapp_id' => '','url' => '','liaison_name' => 'cuishi guo','liaison_phone' => '','service' => ''],
+        ['serial_number' => 'AD01-001','name' => 'twkt.bio','tax_id' => NULL,'phone' => '','fax' => '','address' => '','email' => 'twkt.bio@gmail.com','line_id' => '','wechat_id' => '','whatsapp_id' => '','url' => '','liaison_name' => 'cuishi guo','liaison_phone' => '','service' => ''],
     ];
 }

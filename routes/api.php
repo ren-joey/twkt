@@ -54,7 +54,7 @@ Route::get('permission-groups', 'PermissionGroupController@all');
 Route::get('check-serial-number', 'LayoutController@serialNumberChecker');
 Route::get('get-serial-number', 'LayoutController@getSerialNumber');
 
-// Route::get('test', 'UserController@test');
+// Route::get('test', 'MaterialController@test');
 
 // Route::get('layout', function ()
 // {

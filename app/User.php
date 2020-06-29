@@ -55,4 +55,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToThrough('App\PermissionGroup', 'App\UserInformation');
     }
+
+    public function materials()
+    {
+        return $this->hasMany('App\Material', 'created_by');
+    }
 }

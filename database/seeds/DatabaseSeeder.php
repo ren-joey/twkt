@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
             MenusTableSeeder::class,
             PermissionGroupsTableSeeder::class,
             MaterialFormColumnsSeeder::class,
-            MaterialsTableSeeder::class,
             UserInformationTableSeeder::class,
+            MaterialsTableSeeder::class,
             // UserSeeder::class
         ]);
     }

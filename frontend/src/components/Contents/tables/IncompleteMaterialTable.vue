@@ -38,90 +38,36 @@
                 itemKey="serial_number"
                 @click:row="rowClickHandler"
             >
-                <template v-slot:top>
-                    <v-dialog v-model="dialog" maxWidth="500px">
-                        <!-- <template v-slot:activator="{ on }">
-                                    <v-btn color="primary"
-                                           dark
-                                           class="mb-2"
-                                           v-on="on"
-                                    >
-                                        New Item
-                                    </v-btn>
-                                </template> -->
-                        <v-card :loading="Fetching.actionEditMaterial === 'Y'">
-                            <v-card-title>
-                                <span class="headline">{{ formTitle }}</span>
-                            </v-card-title>
-
-                            <v-card-text>
-                                <v-container>
-                                    <v-row>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.name" label="Dessert name" />
-                                        </v-col>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.calories" label="Calories" />
-                                        </v-col>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.fat" label="Fat (g)" />
-                                        </v-col>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.carbs" label="Carbs (g)" />
-                                        </v-col>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.protein" label="Protein (g)" />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-card-text>
-
-                            <v-card-actions>
-                                <v-spacer />
-                                <v-btn color="blue darken-1"
-                                       text
-                                       @click="close"
-                                >
-                                    Cancel
-                                </v-btn>
-                                <v-btn color="blue darken-1"
-                                       text
-                                       @click="save"
-                                >
-                                    Save
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
+                <template v-slot:item.status="{ item }">
+                    <v-chip class="ma-2"
+                            small
+                            v-if="item.status === 'edit'"
+                    >
+                        編輯
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            color="red"
+                            textColor="white"
+                            v-else-if="item.status === 'confirm'"
+                    >
+                        待確認
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            outlined
+                            color="red"
+                            v-else-if="item.status === 'verify'"
+                    >
+                        審核中
+                    </v-chip>
                 </template>
-                <template v-if="
-                              PermissionName !== 'user'
-                                  && PermissionName !== 'guest'"
+                <template v-if=" PermissionName !== 'user'
+                              && PermissionName !== 'guest'"
                           v-slot:item.actions="{ item }"
                 >
                     <v-icon
-                        small
-                        class="mr-2"
-                        @click="editItem(item)"
-                    >
-                        mdi-pencil
-                    </v-icon>
-                    <v-icon
+                        v-if="item.status === 'edit'"
                         small
                         @click="deleteItem(item)"
                     >
@@ -205,17 +151,19 @@ export default {
             if (this.PermissionName === 'user'
                 || this.PermissionName === 'guest') {
                 return [
+                    { text: '狀態', align: 'start', value: 'status' },
                     { text: '編號', align: 'start', value: 'serial_number' },
                     { text: '原料名稱', value: 'name' },
                     { text: '來源', value: 'origin_name' },
                     { text: '規格1', value: 'spec_1' },
                     { text: '規格2', value: 'spec_2' },
                     { text: '產地', value: 'origin' },
-                    { text: '功能', value: 'function' },
-                    { text: '', value: 'data-table-expand' }
+                    { text: '功能', value: 'function' }
+                    // { text: '', value: 'data-table-expand' }
                 ];
             }
             return [
+                { text: '狀態', align: 'start', value: 'status' },
                 { text: '編號', align: 'start', value: 'serial_number' },
                 { text: '原料名稱', value: 'name' },
                 { text: '來源', value: 'origin_name' },
@@ -226,13 +174,13 @@ export default {
                 // { text: '認證', value: 'material_certification' },
                 // { text: '臨床研究/文獻', value: 'material_clinic' },
                 { text: '功能', value: 'function' },
-                { text: '操作', value: 'actions', sortable: false },
-                { text: '', value: 'data-table-expand' }
+                { text: '操作', value: 'actions', sortable: false }
+                // { text: '', value: 'data-table-expand' }
             ];
         },
         ...mapGetters({
             PermissionName: 'getPermissionName',
-            Materials: 'getCompleteMaterials'
+            Materials: 'getIncompleteMaterials'
         }),
         ...mapState(['Fetching', 'UserInfo'])
     },

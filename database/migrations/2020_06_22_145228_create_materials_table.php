@@ -16,6 +16,7 @@ class CreateMaterialsTable extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
 
+            $table->char('status', 32)->default('edit'); // edit | verify | confirm | complete
             $table->char('serial_number', 32)->unique()->nullable();    // 1原料編號
             $table->char('name', 32);                                   // *2原料名稱
             $table->char('moq', 32);                                    // *3MOQ
@@ -38,6 +39,7 @@ class CreateMaterialsTable extends Migration
             $table->text('image_json')->nullable();                     // 20上傳產品資訊(jpg./pdf.檔案)
             $table->text('cuzo')->nullable();                           // 21常備庫存
             $table->text('comment')->nullable();                        // 22其他
+            $table->bigInteger('created_by');
 
             $table->timestamps();
             $table->softDeletes();

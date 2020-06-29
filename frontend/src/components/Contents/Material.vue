@@ -7,7 +7,8 @@
                 </template>
             </v-breadcrumbs>
 
-            <MaterialTable :subtitle="subtitle" />
+            <MaterialTable :subtitle="'上架中'" />
+            <IncompleteMaterialTable :subtitle="'未上架'" />
 
             <v-btn
                 bottom
@@ -56,15 +57,15 @@ import bus from '@/bus';
 import { mapState, mapGetters } from 'vuex';
 import DialogAddMaterial from '../Dialog/AddMaterial';
 import MaterialTable from './tables/MaterialTable';
+import IncompleteMaterialTable from './tables/IncompleteMaterialTable';
 import MaterialDetail from './details/MaterialDetail';
 
 export default {
     components: {
-        DialogAddMaterial, MaterialTable, MaterialDetail
+        DialogAddMaterial, MaterialTable, IncompleteMaterialTable, MaterialDetail
     },
     data: () => ({
-        bus,
-        subtitle: '總覽'
+        bus
     }),
     computed: {
         history() {
