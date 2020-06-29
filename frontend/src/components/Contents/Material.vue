@@ -1,5 +1,14 @@
 <template>
     <v-main>
+        <v-tabs v-model="activeTab"
+                backgroundColor="grey lighten-3"
+                style="position: sticky; top: 65px"
+        >
+            <v-tabs-slider color="grey lighten" />
+            <v-tab key="overview">總覽</v-tab>
+            <v-tab key="">我的原物料</v-tab>
+        </v-tabs>
+
         <v-container v-if="!$route.params.material_id">
             <v-breadcrumbs :items="history">
                 <template v-slot:divider>
@@ -65,24 +74,26 @@ export default {
         DialogAddMaterial, MaterialTable, IncompleteMaterialTable, MaterialDetail
     },
     data: () => ({
-        bus
+        bus,
+        activeTab: 'all'
     }),
     computed: {
         history() {
-            const history = [
-                { text: '原物料' }
-            ];
+            const history = [];
 
-            if (this.$route.params.material_id) {
-                history[0].href = '/#/material';
-                if (this.$route.params.material_id === 0) {
-                    history.push({
-                        text: '創建原物料'
-                    });
-                } else {
-                    history.push({
-                        text: '原物料資料'
-                    });
+            if (this.activeTab === 'all') history.push({ text: '原物料' });
+            else if (this.activeTab === 'own') {
+                if (this.$route.params.material_id) {
+                    history[0].href = '/#/material';
+                    if (this.$route.params.material_id === 0) {
+                        history.push({
+                            text: '創建原物料'
+                        });
+                    } else {
+                        history.push({
+                            text: '原物料資料'
+                        });
+                    }
                 }
             }
             return history;

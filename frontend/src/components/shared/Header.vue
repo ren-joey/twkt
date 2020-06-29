@@ -11,7 +11,6 @@
             class="ml-0 pl-4"
         >
             <router-link tag="span"
-                         class="hidden-sm-and-down"
                          :to="{ name: 'index' }"
                          style="cursor: pointer;"
             >
