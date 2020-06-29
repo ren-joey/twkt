@@ -79,7 +79,7 @@
                         <v-row>
                             <v-col cols="12" sm="6">
                                 <v-text-field
-                                    v-model="user.user_information.phone"
+                                    v-model="user.user_information.fax"
                                     label="傳真號碼"
                                     prependIcon="mdi-fax"
                                     v-bind="inputAttributes"
