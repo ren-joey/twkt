@@ -101,7 +101,7 @@ export default {
         ...mapState(['UserInfo']),
         headerAttrs() {
             const { is_login } = this.UserInfo;
-            if (is_login === 'N') return { color: 'blue darken-3' };
+            if (is_login === 'N') return { color: 'green darken-4' };
 
             const permissionName = this.UserInfo.permission_group.col_name;
             if (permissionName === 'guest'

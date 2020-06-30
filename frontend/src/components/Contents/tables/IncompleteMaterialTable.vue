@@ -180,9 +180,10 @@ export default {
         },
         ...mapGetters({
             PermissionName: 'getPermissionName',
-            Materials: 'getIncompleteMaterials'
+            Materials: 'getIncompleteMaterials',
+            Fetching: 'getFetching'
         }),
-        ...mapState(['Fetching', 'UserInfo'])
+        ...mapState(['UserInfo'])
     },
     watch: {
         dialog(val) {

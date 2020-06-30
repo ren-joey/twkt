@@ -14,7 +14,7 @@ class Order extends Model
         return $this->hasMany('App\Comment');
     }
 
-    public function materials()
+    public function orderMaterials()
     {
         return $this->hasMany('App\OrderMaterial');
     }

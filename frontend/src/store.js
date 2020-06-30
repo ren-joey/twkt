@@ -9,7 +9,13 @@ export default new Vuex.Store({
         Page: undefined,
         Snack: {},
         UserInfo: undefined,
-        Fetching: {},
+        Fetching: {
+            actionCheckLogin: 'N',
+            actionLogin: 'N',
+            actionLogout: 'N',
+            actionFetchMaterials: 'N',
+            actionFetchUsers: 'N'
+        },
         Materials: [],
         Users: []
     },
@@ -21,7 +27,8 @@ export default new Vuex.Store({
         getEditMaterials: (state) => state.Materials.filter((m) => m.status === 'edit'),
         getVerifyMaterials: (state) => state.Materials.filter((m) => m.status === 'verify'),
         getConfirmMaterials: (state) => state.Materials.filter((m) => m.status === 'confirm'),
-        getIncompleteMaterials: (state) => state.Materials.filter((m) => m.status !== 'complete')
+        getIncompleteMaterials: (state) => state.Materials.filter((m) => m.status !== 'complete'),
+        getFetching: (state) => state.Fetching
     },
     mutations: {
         /* eslint-disable no-param-reassign */

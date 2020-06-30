@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Material;
 use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,6 +29,15 @@ class OrderController extends Controller
         $order->name = $request->input('name');
         $order->description = $request->input('description');
         $order->create_by = $user->id;
+
+        $materials = $request->materials->explode(',');
+        // $orderMaterial =
+        // foreach($materials as $material_id)
+        // {
+        //     $material = Material::find($material_id);
+        //     $order->materials()->attach($material);
+        // }
+        // $order->save();
 
         return response($user, Response::HTTP_OK);
     }
