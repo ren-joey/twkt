@@ -18,4 +18,9 @@ class Material extends Model
     {
         return $this->belongsTo('App\User', 'created_by');
     }
+
+    public function orderMaterial()
+    {
+        return $this->hasMany('App\OrderMaterial');
+    }
 }

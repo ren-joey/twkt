@@ -18,8 +18,8 @@ class CreateOrdersTable extends Migration
 
             $table->char('name', 32);
             $table->text('description')->nullable();
-            $table->bigInteger('create_by');
-            $table->bigInteger('agent')->nullable();
+            $table->bigInteger('created_by');
+            // $table->bigInteger('agent')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

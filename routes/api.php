@@ -38,6 +38,10 @@ Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function(
     Route::get('layout', 'LayoutController@all');
     Route::get('materials', 'MaterialController@index');
     Route::get('material/{material_id?}', 'MaterialController@get');
+
+    Route::get('order/{id?}', 'OrderController@get');
+    Route::post('order', 'OrderController@create');
+
     Route::get('users', 'UserController@all');
     Route::get('user/{id?}', 'UserController@get');
     Route::post('user/{id?}', 'UserController@userPassword'); // update user password
@@ -55,13 +59,6 @@ Route::get('check-serial-number', 'LayoutController@serialNumberChecker');
 Route::get('get-serial-number', 'LayoutController@getSerialNumber');
 
 // Route::get('test', 'MaterialController@test');
-
-// Route::get('layout', function ()
-// {
-//     return response(['success' => 'Y'], Response::HTTP_OK);
-// });
-
-Route::post('order', 'OrderController@create');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

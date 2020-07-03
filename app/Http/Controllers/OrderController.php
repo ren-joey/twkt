@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Material;
 use App\Order;
+use App\OrderMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -28,17 +29,38 @@ class OrderController extends Controller
         $order = new Order;
         $order->name = $request->input('name');
         $order->description = $request->input('description');
-        $order->create_by = $user->id;
+        $order->created_by = $user->id;
+        $order->save();
 
-        $materials = $request->materials->explode(',');
-        // $orderMaterial =
-        // foreach($materials as $material_id)
-        // {
-        //     $material = Material::find($material_id);
-        //     $order->materials()->attach($material);
-        // }
-        // $order->save();
+        $materials = explode(',', $request->materials);
+        foreach($materials as $materialData)
+        {
+            $material_id = explode(':', $materialData)[0];
+            $material_amount = explode(':', $materialData)[1];
 
-        return response($user, Response::HTTP_OK);
+            if (!$material_amount) return response([], Response::HTTP_BAD_REQUEST);
+
+            $orderMaterial = new OrderMaterial;
+            $material = Material::find($material_id);
+
+            if (!$material) return response([], Response::HTTP_BAD_REQUEST);
+
+            $orderMaterial->material_id = $material->id;
+            $orderMaterial->order_id = $order->id;
+            $orderMaterial->amount = $material_amount;
+            $orderMaterial->save();
+        }
+
+        $order->orderMaterials->material();
+        return response($order, Response::HTTP_OK);
+    }
+
+    public function get($id)
+    {
+        $order = Order::find($id);
+        $order->orderMaterials->each(function ($orderMaterial) {
+            $orderMaterial->material;
+        });
+        return response($order, Response::HTTP_OK);
     }
 }

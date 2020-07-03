@@ -11,11 +11,11 @@ class OrderMaterial extends Model
 
     public function order()
     {
-        return $this->belongsTo('App/Order');
+        return $this->belongsTo('App\Order');
     }
 
     public function material()
     {
-        return $this->hasOne('App/Material');
+        return $this->belongsTo('App\Material');
     }
 }
