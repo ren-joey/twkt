@@ -94,4 +94,18 @@ class DataSeed {
     const admins = [
         ['serial_number' => 'AD01-001','name' => 'twkt.bio','tax_id' => NULL,'phone' => '','fax' => '','address' => '','email' => 'twkt.bio@gmail.com','line_id' => '','wechat_id' => '','whatsapp_id' => '','url' => '','liaison_name' => 'cuishi guo','liaison_phone' => '','service' => ''],
     ];
+
+    const existUser = [
+        [
+            'name' => 'Anny',
+            'email' => 'twkt18@gmail.com',
+            'password' => '$2y$10$mBNkeb55XGDqFah/Bl7/qOXXY6PeuCL5OLzjsgJkELCASc72Uqqum',
+            'serial_number' => 'AG01-002',
+            'tax_id' => '53245911',
+            'phone' => '07-5576266',
+            'address' => '高雄市左營區富民路418號2樓',
+            'email' => 'twkt18@gmail.com',
+            'liaison_name' => '鐘小姐'
+        ]
+    ];
 }

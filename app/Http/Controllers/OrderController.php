@@ -57,10 +57,20 @@ class OrderController extends Controller
 
     public function get($id)
     {
+        $user = Auth::user();
+        $permissionName = $user->permissionGroup->col_name;
         $order = Order::find($id);
-        $order->orderMaterials->each(function ($orderMaterial) {
-            $orderMaterial->material;
-        });
-        return response($order, Response::HTTP_OK);
+
+        if (!$order) return response([], Response::HTTP_NO_CONTENT);
+
+        if ($permissionName === 'agent'
+            || $permissionName === 'admin'
+            || $user->id === $order->created_by) {
+                $order->orderMaterials->each(function ($orderMaterial) {
+                    $orderMaterial->material;
+                });
+                return response($order, Response::HTTP_OK);
+        }
+        return response([], Response::HTTP_UNAUTHORIZED);
     }
 }

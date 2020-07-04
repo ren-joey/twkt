@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -50,6 +53,20 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof MethodNotAllowedHttpException)
+        {
+            return response([
+                'message' => 'Your request method is illegal.'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($exception instanceof AuthenticationException)
+        {
+            return response([
+                'is_login' => 'N'
+            ], Response::HTTP_OK);
+        }
+
         return parent::render($request, $exception);
     }
 }
