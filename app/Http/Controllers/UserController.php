@@ -205,7 +205,7 @@ class UserController extends Controller
             $user = User::with('userInformation')->with('permissionGroup')->find($id);
             $userInformation = $user->userInformation;
             $userInformation->update($request->except(['create_at', 'id', 'permission_group_id', 'serial_number', 'update_at', 'permission_group']));
-            $user->update($request->only(['name', 'emal']));
+            $user->update($request->only(['name', 'email']));
             return response($user, Response::HTTP_OK);
         }
         return response([], Response::HTTP_UNAUTHORIZED);

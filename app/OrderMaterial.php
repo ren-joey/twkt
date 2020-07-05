@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderMaterial extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     public function order()
     {

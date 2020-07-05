@@ -37,13 +37,24 @@ Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function(
     Route::get('check-login', 'UserController@details');
     Route::get('logout', 'UserController@logout');
     Route::get('layout', 'LayoutController@all');
+
     Route::get('materials', 'MaterialController@index');
     Route::get('material/{material_id?}', 'MaterialController@get');
 
-    Route::get('order/{id?}', 'OrderController@get');
+    Route::get('order/{order_id?}', 'OrderController@get');
     Route::post('order', 'OrderController@create');
+    Route::patch('order', 'OrderController@update');
+    Route::patch('order/next-step/{order_id}', 'OrderController@next');
+    Route::patch('order/prev-step/{order_id}', 'OrderController@prev');
+    Route::patch('order/to-step/{order_id}', 'OrderController@to');
+    Route::delete('order/{order_id}', 'OrderController@delete');
 
-    Route::get('comments/by-order/{id?}', 'CommentController@byOrder');
+    Route::get('comments/by-order/{order_id?}', 'CommentController@byOrder');
+    Route::get('comments/by-material/{material_id?}', 'CommentController@byMaterial');
+    Route::get('comments/by-quotation/{quotation_id?}', 'CommentController@byQuotation');
+    Route::patch('comment/{comment_id}', 'CommentController@update');
+    Route::delete('comment/{comment_id}', 'CommentController@delete');
+    Route::post('comment', 'CommentController@create');
 
     Route::get('users', 'UserController@all');
     Route::get('user/{id?}', 'UserController@get');

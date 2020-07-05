@@ -23,4 +23,9 @@ class Material extends Model
     {
         return $this->hasMany('App\OrderMaterial');
     }
+
+    public function quotation()
+    {
+        return $this->hasOne('App\Quotation');
+    }
 }

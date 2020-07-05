@@ -11,9 +11,9 @@ class Comment extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function quote()
+    public function quotation()
     {
-        return $this->belongsTo(Quote::class);
+        return $this->belongsTo(Quotation::class);
     }
 
     public function material()

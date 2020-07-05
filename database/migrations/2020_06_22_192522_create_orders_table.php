@@ -16,6 +16,8 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
 
+            // edit | verify | confirm | quoting | complete
+            $table->char('status', 32)->default('edit');
             $table->char('name', 32);
             $table->text('description')->nullable();
             $table->bigInteger('created_by');

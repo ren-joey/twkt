@@ -16,8 +16,11 @@ class CreateQuotationsTable extends Migration
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
 
+            // edit | verify | confirm | complete
+            $table->char('status', 32)->default('edit');
             $table->bigInteger('material_id');
-            $table->bigInteger('user_information_id');
+            // $table->bigInteger('user_information_id');
+            $table->bigInteger('created_by');
             $table->integer('price');
             $table->char('currency')->default('TWD');
             $table->date('arrival_date');

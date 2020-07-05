@@ -20,7 +20,7 @@ class CreateMaterialsTable extends Migration
             $table->char('serial_number', 32)->unique()->nullable();    // 1原料編號
             $table->char('name', 32);                                   // *2原料名稱
             $table->char('moq', 32);                                    // *3MOQ
-            // $table->bigInteger('quote_id')->nullable();                 // 4報價 5報價日期
+            // $table->bigInteger('quotation_id')->nullable();                 // 4報價 5報價日期
             $table->text('spec_1');                                     // *6規格一
             $table->text('spec_2');                                     // *7規格二
             $table->char('origin_name', 32)->nullable();                // 8原廠名稱
