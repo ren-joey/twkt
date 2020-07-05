@@ -261,5 +261,6 @@ export default {
 <style lang="scss" scoped>
     .login-bg {
         background-image: url('../../assets/images/login_bg.jpg');
+        background-position: top center;
     }
 </style>
