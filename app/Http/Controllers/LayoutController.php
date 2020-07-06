@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\MaterialFormColumn;
 use App\PermissionGroup;
 use App\UserInformation;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class LayoutController extends Controller
         $user = Auth::user();
         $menus = $user->userInformation->permissionGroup->menus;
         return response([
-            'menus' => $menus
+            'menus' => $menus,
+            'material_form_columns' => MaterialFormColumn::cursor()
         ], Response::HTTP_OK);
     }
 

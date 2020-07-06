@@ -33,7 +33,7 @@ const router = new Router({
             component: () => import('@/views/Material')
         },
         {
-            path: '/order',
+            path: '/order/:method?/:order_id?',
             name: 'order',
             component: () => import('@/views/Order')
         },

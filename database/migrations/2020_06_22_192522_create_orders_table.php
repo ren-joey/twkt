@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->char('status', 32)->default('edit');
             $table->char('name', 32);
             $table->text('description')->nullable();
+            $table->text('order_details');
             $table->bigInteger('created_by');
             // $table->bigInteger('agent')->nullable();
 

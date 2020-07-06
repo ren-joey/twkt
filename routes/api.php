@@ -38,12 +38,14 @@ Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function(
     Route::get('logout', 'UserController@logout');
     Route::get('layout', 'LayoutController@all');
 
+    Route::get('published-materials', 'MaterialController@published');
     Route::get('materials', 'MaterialController@index');
     Route::get('material/{material_id?}', 'MaterialController@get');
 
-    Route::get('order/{order_id?}', 'OrderController@get');
+    Route::get('orders', 'OrderController@all');
+    Route::get('order/{order_id}', 'OrderController@get');
     Route::post('order', 'OrderController@create');
-    Route::patch('order', 'OrderController@update');
+    Route::patch('order/{order_id}', 'OrderController@update');
     Route::patch('order/next-step/{order_id}', 'OrderController@next');
     Route::patch('order/prev-step/{order_id}', 'OrderController@prev');
     Route::patch('order/to-step/{order_id}', 'OrderController@to');

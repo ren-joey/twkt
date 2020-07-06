@@ -2,7 +2,7 @@
     <v-main>
         <v-tabs v-model="activeTab"
                 backgroundColor="grey lighten-3"
-                style="position: sticky; top: 65px"
+                style="position: sticky; top: 65px; z-index: 2;"
         >
             <v-tabs-slider color="grey lighten" />
             <v-tab key="overview">總覽</v-tab>

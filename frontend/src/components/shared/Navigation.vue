@@ -178,17 +178,17 @@ export default {
                         this.$router.push({ name: 'material' });
                     }
                 },
-                // {
-                //     icon: 'mdi-clipboard-list',
-                //     text: '我的訂單',
-                //     permission: this.PermissionName !== 'company' ? 'Y' : 'N',
-                //     to: {
-                //         name: 'order'
-                //     },
-                //     click: () => {
-                //         this.$router.push({ name: 'order' });
-                //     }
-                // },
+                {
+                    icon: 'mdi-clipboard-list',
+                    text: '我的訂單',
+                    permission: this.PermissionName !== 'company' ? 'Y' : 'N',
+                    to: {
+                        name: 'order'
+                    },
+                    click: () => {
+                        this.$router.push({ name: 'order' });
+                    }
+                },
                 {
                     icon: 'mdi-account',
                     text: '用戶管理',

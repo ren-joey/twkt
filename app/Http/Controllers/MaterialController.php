@@ -23,6 +23,11 @@ class MaterialController extends Controller
         }
     }
 
+    public function published()
+    {
+        return response(Material::where('status', '=', 'published')->cursor(), Response::HTTP_OK);
+    }
+
     public function get($id)
     {
         return response(Material::find($id), Response::HTTP_OK);

@@ -13,6 +13,21 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
+    public function all()
+    {
+        $user = Auth::user();
+        $permissionName = $user->permissionGroup->col_name;
+
+        if ($permissionName === 'agent'
+        || $permissionName === 'admin')
+        {
+            return response(Order::cursor(), Response::HTTP_OK);
+        }
+
+        $orders = Order::where('created_by', '=', $user->id)->cursor();
+        return response($orders, Response::HTTP_OK);
+    }
+
     public function create(Request $request)
     {
         $user = Auth::user();
@@ -53,7 +68,9 @@ class OrderController extends Controller
             $orderMaterial->save();
         }
 
-        $order->orderMaterials->material();
+        $order->orderMaterials->each(function ($orderMaterial) {
+            $orderMaterial->material;
+        });
         return response($order, Response::HTTP_OK);
     }
 

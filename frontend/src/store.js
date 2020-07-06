@@ -6,6 +6,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        Layout: {
+            menus: [],
+            material_form_columns: []
+        },
         Page: undefined,
         Snack: {},
         UserInfo: undefined,
@@ -14,10 +18,12 @@ export default new Vuex.Store({
             actionLogin: 'N',
             actionLogout: 'N',
             actionFetchMaterials: 'N',
-            actionFetchUsers: 'N'
+            actionFetchUsers: 'N',
+            actionFetchLayout: 'N'
         },
         Materials: [],
-        Users: []
+        Users: [],
+        Orders: []
     },
     getters: {
         getPage: (state) => state.Page,
@@ -28,19 +34,26 @@ export default new Vuex.Store({
         getVerifyMaterials: (state) => state.Materials.filter((m) => m.status === 'verify'),
         getConfirmMaterials: (state) => state.Materials.filter((m) => m.status === 'confirm'),
         getIncompleteMaterials: (state) => state.Materials.filter((m) => m.status !== 'complete'),
+        getCompleteOrders: (state) => state.Orders.filter((m) => m.status === 'complete'),
+        getIncompleteOrders: (state) => state.Orders.filter((m) => m.status !== 'complete'),
         getFetching: (state) => state.Fetching
     },
     mutations: {
         /* eslint-disable no-param-reassign */
         setUserInfo: (state, obj) => {
-            if (obj === undefined) state.UserInfo = { is_login: 'N' };
+            if (obj === undefined
+                || obj.message !== undefined) state.UserInfo = { is_login: 'N' };
             else state.UserInfo = obj;
             // else state.UserInfo = { ...state.UserInfo, ...obj };
+        },
+        setLayout: (state, obj) => {
+            state.Layout = obj;
         },
         setPage: (state, str) => { state.Page = str; },
         setFetching: (state, obj) => { state.Fetching[obj.name] = obj.status; },
         setMaterials: (state, arr) => { state.Materials = arr; },
-        setUsers: (state, arr) => { state.Users = arr; }
+        setUsers: (state, arr) => { state.Users = arr; },
+        setOrders: (state, arr) => { state.Orders = arr; }
     },
     actions: {
         actionCheckLogin: ({ state, commit }) => new Promise((resolve, reject) => {
@@ -98,6 +111,24 @@ export default new Vuex.Store({
                 commit('setFetching', { name, status: 'N' });
             });
         }),
+        actionFetchLayout: ({ state, commit }) => new Promise((resolve, reject) => {
+            const name = 'actionFetchLayout';
+            if (state.Fetching[name] === 'Y') reject();
+            commit('setFetching', { name, status: 'Y' });
+
+            axios({
+                method: 'GET',
+                url: 'api/layout'
+            }).then((res) => {
+                commit('setLayout', res.data);
+                resolve(res.data);
+            }).catch((e) => {
+                alert(e);
+                reject();
+            }).finally(() => {
+                commit('setFetching', { name, status: 'N' });
+            });
+        }),
         actionFetchMaterials: ({ state, commit }) => new Promise((resolve, reject) => {
             const name = 'actionFetchMaterials';
             if (state.Fetching[name] === 'Y') reject();
@@ -126,6 +157,24 @@ export default new Vuex.Store({
                 url: 'api/users'
             }).then((res) => {
                 commit('setUsers', res.data);
+                resolve(res.data);
+            }).catch((e) => {
+                alert(e);
+                reject();
+            }).finally(() => {
+                commit('setFetching', { name, status: 'N' });
+            });
+        }),
+        actionFetchOrders: ({ state, commit }) => new Promise((resolve, reject) => {
+            const name = 'actionFetchOrders';
+            if (state.Fetching[name] === 'Y') reject();
+            commit('setFetching', { name, status: 'Y' });
+
+            axios({
+                method: 'GET',
+                url: 'api/orders'
+            }).then((res) => {
+                commit('setOrders', res.data);
                 resolve(res.data);
             }).catch((e) => {
                 alert(e);
