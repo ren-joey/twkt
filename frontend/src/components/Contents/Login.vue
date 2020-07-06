@@ -63,8 +63,9 @@
                                 <div class="my-2">
                                     <v-btn @click="login"
                                            block
-                                           color="primary"
+                                           color="green darken-4"
                                            :loading="Fetching.actionLogin === 'Y'"
+                                           dark
                                            large
                                     >
                                         {{ $t('LOGIN_CONFIRM') }}
