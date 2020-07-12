@@ -1,5 +1,7 @@
 <?php
 
+use App\Material;
+use App\MaterialCategory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,6 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            MaterialCategoriesTableSeeder::class,
             MenusTableSeeder::class,
             PermissionGroupsTableSeeder::class,
             MaterialFormColumnsSeeder::class,

@@ -223,6 +223,14 @@ export default {
             ];
         },
         navAttrs() {
+            if (this.UserInfo.is_login === 'N') {
+                return {
+                    dark: '',
+                    src: 'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-1.jpg'
+                    // color: 'rgba(0, 0, 0, 0.5)'
+                };
+            }
+
             const permissionName = this.UserInfo.permission_group.col_name;
             if (['user', 'guest', 'company'].indexOf(permissionName) > -1) {
                 return {

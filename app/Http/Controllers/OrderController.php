@@ -90,7 +90,7 @@ class OrderController extends Controller
                 });
                 return response($order, Response::HTTP_OK);
         }
-        return response([], Response::HTTP_UNAUTHORIZED);
+        throw new AuthenticationException();
     }
 
     public function update(Request $request, $order_id)
@@ -131,7 +131,7 @@ class OrderController extends Controller
                     }
                 }
             }
-        return response([], Response::HTTP_UNAUTHORIZED);
+        throw new AuthenticationException();
     }
 
     public function next($order_id)

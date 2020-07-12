@@ -8,7 +8,8 @@ export default new Vuex.Store({
     state: {
         Layout: {
             menus: [],
-            material_form_columns: []
+            material_form_columns: [],
+            material_categories: []
         },
         Page: undefined,
         Snack: {},
@@ -29,11 +30,28 @@ export default new Vuex.Store({
         getPage: (state) => state.Page,
         getPermissionName: (state) => state.UserInfo.permission_group.col_name,
         getUserInfo: (state) => state.UserInfo,
+        getMaterialCategories: (state) => state.Layout.material_categories,
+        getMaterialColumns: (state) => state.Layout.material_form_columns,
+
+        // 所有原物料
+        getMaterials: (state) => state.Materials,
+        // 所有已上架的原物料
+        getPublishedMaterials: (state) => state.Materials.filter((m) => m.status === 'published'),
+        // 所有未上架的原物料
+        getUnpublishedMaterials: (state) => state.Materials.filter((m) => m.status === 'unpublished'),
+        // 所有已完成的原物料
         getCompleteMaterials: (state) => state.Materials.filter((m) => m.status === 'complete'),
+        // 所有編輯中的原物料
         getEditMaterials: (state) => state.Materials.filter((m) => m.status === 'edit'),
+        // 所有待「管理員」確認的原物料
         getVerifyMaterials: (state) => state.Materials.filter((m) => m.status === 'verify'),
+        // 所有待「使用者」確認的原物料
         getConfirmMaterials: (state) => state.Materials.filter((m) => m.status === 'confirm'),
-        getIncompleteMaterials: (state) => state.Materials.filter((m) => m.status !== 'complete'),
+        // 所有編輯中的原物料，包含此步驟以前所有的步驟
+        getIncompleteMaterials: (state) => state.Materials.filter((m) => m.status !== 'complete'
+                && m.status !== 'published'
+                && m.status !== 'unpublished'),
+
         getCompleteOrders: (state) => state.Orders.filter((m) => m.status === 'complete'),
         getIncompleteOrders: (state) => state.Orders.filter((m) => m.status !== 'complete'),
         getFetching: (state) => state.Fetching

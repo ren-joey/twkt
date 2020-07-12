@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\MaterialCategory;
 use App\MaterialFormColumn;
 use App\PermissionGroup;
 use App\UserInformation;
@@ -14,11 +15,12 @@ class LayoutController extends Controller
 {
     public function all(Request $request)
     {
-        $user = Auth::user();
-        $menus = $user->userInformation->permissionGroup->menus;
+        // $user = Auth::user();
+        // $menus = $user->userInformation->permissionGroup->menus;
         return response([
-            'menus' => $menus,
-            'material_form_columns' => MaterialFormColumn::cursor()
+            // 'menus' => $menus,
+            'material_form_columns' => MaterialFormColumn::cursor(),
+            'material_categories' => MaterialCategory::cursor()
         ], Response::HTTP_OK);
     }
 
@@ -36,7 +38,7 @@ class LayoutController extends Controller
         $existModel = app("App\\$request->model")::where('serial_number', '=', $request->input('serial_number'))->first();
 
         return response([
-            'availible' => !$existModel ? 'Y' : 'N'
+            'available' => !$existModel ? 'Y' : 'N'
         ], Response::HTTP_OK);
     }
 

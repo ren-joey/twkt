@@ -9,6 +9,8 @@ class Material extends Model
 {
     use SoftDeletes;
 
+    protected $guarded = ['id'];
+
     public function comments()
     {
         return $this->hasMany('App\Comment');

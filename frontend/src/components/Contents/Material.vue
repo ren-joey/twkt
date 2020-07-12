@@ -3,21 +3,36 @@
         <v-tabs v-model="activeTab"
                 backgroundColor="grey lighten-3"
                 style="position: sticky; top: 65px; z-index: 2;"
+                v-if="!$route.params.material_id"
         >
             <v-tabs-slider color="grey lighten" />
-            <v-tab key="overview">總覽</v-tab>
-            <v-tab key="">我的原物料</v-tab>
+            <v-tab>總覽</v-tab>
+            <v-tab v-if="PermissionName !== 'user'
+                && PermissionName !== 'guest'"
+            >
+                我的原物料
+            </v-tab>
         </v-tabs>
 
-        <v-container v-if="!$route.params.material_id">
+        <v-container v-if="$route.params.material_id === '0'">
             <v-breadcrumbs :items="history">
                 <template v-slot:divider>
                     <v-icon>mdi-chevron-right</v-icon>
                 </template>
             </v-breadcrumbs>
 
-            <MaterialTable :subtitle="'上架中'" />
-            <IncompleteMaterialTable :subtitle="'未上架'" />
+            <CreateMaterial />
+        </v-container>
+
+        <v-container v-else-if="!$route.params.material_id">
+            <template v-if="activeTab === 0">
+                <MaterialTable :subtitle="'總覽'" :materials="Materials" />
+            </template>
+            <template v-else-if="activeTab === 1">
+                <MaterialTable :subtitle="'上架中'" :materials="PublishedMaterials" />
+                <MaterialTable :subtitle="'未上架'" :materials="UnpublishedMaterials" />
+                <MaterialTable :subtitle="'未完成'" :materials="IncompleteMaterials" />
+            </template>
 
             <v-btn
                 bottom
@@ -26,7 +41,7 @@
                 fab
                 fixed
                 right
-                @click="bus.$emit('addMaterial');"
+                @click="$router.push({ name: 'material', params: { material_id: '0' } })"
                 v-if="PermissionName !== 'user'
                     && PermissionName !== 'guest'"
             >
@@ -66,42 +81,49 @@ import bus from '@/bus';
 import { mapState, mapGetters } from 'vuex';
 import DialogAddMaterial from '../Dialog/AddMaterial';
 import MaterialTable from './tables/MaterialTable';
-import IncompleteMaterialTable from './tables/IncompleteMaterialTable';
 import MaterialDetail from './details/MaterialDetail';
+import CreateMaterial from './create/CreateMaterial';
 
 export default {
     components: {
-        DialogAddMaterial, MaterialTable, IncompleteMaterialTable, MaterialDetail
+        DialogAddMaterial, MaterialTable, MaterialDetail, CreateMaterial
     },
     data: () => ({
         bus,
-        activeTab: 'all'
+        activeTab: 0
     }),
     computed: {
         history() {
             const history = [];
 
-            if (this.activeTab === 'all') history.push({ text: '原物料' });
-            else if (this.activeTab === 'own') {
-                if (this.$route.params.material_id) {
-                    history[0].href = '/#/material';
-                    if (this.$route.params.material_id === 0) {
-                        history.push({
-                            text: '創建原物料'
-                        });
-                    } else {
-                        history.push({
-                            text: '原物料資料'
-                        });
-                    }
+            if (this.activeTab === 0) history.push({ text: '原物料總覽' });
+            else if (this.activeTab === 1) history.push({ text: '我的原物料' });
+            if (this.$route.params.material_id) {
+                history[0].href = '/#/material';
+                if (this.$route.params.material_id === '0') {
+                    history.push({
+                        text: '創建原物料'
+                    });
+                } else {
+                    history.push({
+                        text: '原物料資料'
+                    });
                 }
             }
+
             return history;
         },
         ...mapGetters({
-            PermissionName: 'getPermissionName'
+            PermissionName: 'getPermissionName',
+            PublishedMaterials: 'getPublishedMaterials',
+            UnpublishedMaterials: 'getUnpublishedMaterials',
+            IncompleteMaterials: 'getIncompleteMaterials',
+            Materials: 'getMaterials'
         }),
         ...mapState(['Materials'])
+    },
+    mounted() {
+        this.$store.dispatch('actionFetchMaterials');
     }
 };
 </script>

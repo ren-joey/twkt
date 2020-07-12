@@ -11,7 +11,7 @@
             <v-data-table
                 :headers="headers"
                 :items="orders"
-                itemKey="name"
+                itemKey="id"
                 class="elevation-1"
             />
         </v-card-text>

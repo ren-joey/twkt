@@ -1,6 +1,14 @@
 <?php
 
 class DataSeed {
+    const categories = [
+        [
+            'serial_number' => 'R001',
+            'col_name' => 'R001',
+            'tw_name' => '蝦紅素'
+        ]
+    ];
+
     const menus = [
         [
             'col_name' => 'materials',
@@ -48,14 +56,12 @@ class DataSeed {
     ];
 
     const materialColumns = [
-        ['col_name' => 'm_id','tw_name' => '原料編號','col_option' => '','type' => 'text'],
-        ['col_name' => 'm_name','tw_name' => '原料名稱','col_option' => '','type' => 'text'],
+        ['col_name' => 'name','tw_name' => '原料名稱','col_option' => '','type' => 'text'],
         ['col_name' => 'moq','tw_name' => 'MOQ','col_option' => '','type' => 'text'],
         ['col_name' => 'price','tw_name' => '報價','col_option' => '','type' => 'text'],
-        ['col_name' => 'price_datetime','tw_name' => '報價日期','col_option' => '','type' => 'text'],
         ['col_name' => 'spec_1','tw_name' => '規格一','col_option' => '','type' => 'text_array'],
         ['col_name' => 'spec_2','tw_name' => '規格二','col_option' => '粉末,顆粒,油狀,液狀,膏狀,片狀,膠狀,糖漿,其它','type' => 'checkbox'],
-        ['col_name' => 'origin_m_name','tw_name' => '原廠名稱','col_option' => '','type' => 'text'],
+        ['col_name' => 'origin_name','tw_name' => '原廠名稱','col_option' => '','type' => 'text'],
         ['col_name' => 'origin','tw_name' => '原料產地','col_option' => '台灣,美國,日本,韓國,中國,法國,沖繩,德國,瑞士,泰國,英國,荷蘭,澳洲,祕魯,印度,印尼,巴西,丹麥,智利,挪威,冰島,波蘭,瑞典,北歐,非洲,義大利,加拿大,以色列,阿根廷,摩洛哥,比利時,墨西哥,愛爾蘭,葡萄牙,俄羅斯,紐西蘭,夏威夷,馬來西亞,斯里蘭卡,哥倫比亞,其它','type' => 'select'],
         ['col_name' => 'patent','tw_name' => '專利','col_option' => '無,功效專利,製程專利,其它','type' => 'checkbox'],
         ['col_name' => 'certification','tw_name' => '認證','col_option' => '無,猶太認證 KOSHER,清真認證 HALAL,非基改 Non-GMO,食品GMP認證,ISO認證,HACCP認證,FSSC22000,ESCOP認證,MSC認證,CE歐盟認證,USDA認證,FDA-GRAS認證,USP美國藥典,ECOCERT有機認證,Organic有機認證,其它','type' => 'checkbox'],
@@ -65,7 +71,7 @@ class DataSeed {
         ['col_name' => 'feature','tw_name' => '原料特性','col_option' => '水溶,油溶,怕光,怕熱,酸鹼,其它','type' => 'checkbox'],
         ['col_name' => 'process','tw_name' => '加工製程','col_option' => '','type' => 'text'],
         ['col_name' => 'dosage_form','tw_name' => '適用劑型','col_option' => '粉包,硬膠囊,軟膠囊,打錠,水劑,其它','type' => 'checkbox'],
-        ['col_name' => 'list','tw_name' => '可供食品使用原料彙整一覽表<br />(依衛生福利部食品藥物管理','col_option' => '草、木本植物類 (1),草、木本植物類 (2),草、木本植物類來源製取之原料,藻類及其來源製取之原料,菇蕈類,微生物及其來源製取之原料,海洋動物、水產類、爬蟲類及其來源製取之原料,禽、畜類及其來源製取之原料,其它','type' => 'select'],
+        ['col_name' => 'list','tw_name' => '可供食品使用原料彙整一覽表 (依衛生福利部食品藥物管理)','col_option' => '草、木本植物類 (1),草、木本植物類 (2),草、木本植物類來源製取之原料,藻類及其來源製取之原料,菇蕈類,微生物及其來源製取之原料,海洋動物、水產類、爬蟲類及其來源製取之原料,禽、畜類及其來源製取之原料,其它','type' => 'select'],
         ['col_name' => 'gov_limit','tw_name' => '衛福部法規限制','col_option' => '','type' => 'text'],
         ['col_name' => 'dosage_amount','tw_name' => '建議劑量','col_option' => '','type' => 'text'],
         ['col_name' => 'image_json','tw_name' => '上傳產品資訊 (jpg./pdf.檔案)','col_option' => '產品資料,規格表,COA,MSDS,營養標示,進出口報單','type' => 'checkbox'],

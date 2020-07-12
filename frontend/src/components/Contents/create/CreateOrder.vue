@@ -164,7 +164,10 @@
                                 />
                             </v-col>
                             <v-col cols="2">
-                                <v-btn icon color="grey">
+                                <v-btn icon
+                                       color="grey"
+                                       @click="selectedMaterial.material = undefined"
+                                >
                                     <v-icon>mdi-close</v-icon>
                                 </v-btn>
                             </v-col>

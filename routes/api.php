@@ -30,16 +30,18 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 Route::post('refreshtoken', 'UserController@refreshToken');
+Route::get('layout', 'LayoutController@all');
 
 Route::get('unauthorized', 'UserController@unauthorized')->name('unauthorized');
 Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function() {
     Route::post('create', 'UserController@create');
     Route::get('check-login', 'UserController@details');
     Route::get('logout', 'UserController@logout');
-    Route::get('layout', 'LayoutController@all');
 
     Route::get('published-materials', 'MaterialController@published');
     Route::get('materials', 'MaterialController@index');
+    Route::post('material', 'MaterialController@create');
+    Route::get('material/get-serial-number/{category_serial_number}', 'MaterialController@serialNumber');
     Route::get('material/{material_id?}', 'MaterialController@get');
 
     Route::get('orders', 'OrderController@all');

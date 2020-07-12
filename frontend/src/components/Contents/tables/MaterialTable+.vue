@@ -8,18 +8,47 @@
                 <v-icon class="mr-2">mdi-semantic-web</v-icon>
                 {{ subtitle }}
             </div>
+            <div class="mr-4"
+                 v-if="PermissionName !== 'user'
+                     && PermissionName !== 'guest'"
+            >
+                <!-- <v-btn class="mr-4"
+                       icon
+                       small
+                       :disabled="selected.length === 0"
+                >
+                    <v-icon>mdi-trash-can-outline</v-icon>
+                </v-btn> -->
+                <v-btn fab
+                       dark
+                       color="pink"
+                       small
+                       @click="bus.$emit('addMaterial', id)"
+                >
+                    <v-icon>mdi-plus</v-icon>
+                </v-btn>
+            </div>
         </v-card-title>
         <v-card-text>
             <v-divider />
             <v-data-table
                 v-model="selected"
                 :headers="headers"
-                :items="materials"
+                :items="Materials"
                 itemKey="serial_number"
                 @click:row="rowClickHandler"
             >
                 <template v-slot:top>
                     <v-dialog v-model="dialog" maxWidth="500px">
+                        <!-- <template v-slot:activator="{ on }">
+                                    <v-btn color="primary"
+                                           dark
+                                           class="mb-2"
+                                           v-on="on"
+                                    >
+                                        New Item
+                                    </v-btn>
+                                </template> -->
                         <v-card :loading="Fetching.actionEditMaterial === 'Y'">
                             <v-card-title>
                                 <span class="headline">{{ formTitle }}</span>
@@ -80,48 +109,45 @@
                         </v-card>
                     </v-dialog>
                 </template>
-                <template v-slot:item.status="{ item }">
-                    <v-chip class="ma-2"
-                            small
-                            color="success"
-                            v-if="item.status === 'published'"
+                <template v-if="
+                              PermissionName !== 'user'
+                                  && PermissionName !== 'guest'"
+                          v-slot:item.actions="{ item }"
+                >
+                    <v-icon
+                        small
+                        class="mr-2"
+                        @click="editItem(item)"
                     >
-                        上架中
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            v-if="item.status === 'unpublished'"
+                        mdi-pencil
+                    </v-icon>
+                    <v-icon
+                        small
+                        @click="deleteItem(item)"
                     >
-                        未上架
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            v-if="item.status === 'complete'"
-                    >
-                        已完成
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            v-if="item.status === 'edit'"
-                    >
-                        編輯
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            color="red"
-                            textColor="white"
-                            v-else-if="item.status === 'confirm'"
-                    >
-                        待確認
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            outlined
-                            color="red"
-                            v-else-if="item.status === 'verify'"
-                    >
-                        審核中
-                    </v-chip>
+                        mdi-delete
+                    </v-icon>
+                </template>
+                <template v-slot:expanded-item="{ item }">
+                    <td :colspan="headers.length">
+                        <v-row>
+                            <v-col cols="4">
+                                專利
+                                <v-divider />
+                                {{ item.patent }}
+                            </v-col>
+                            <v-col cols="4">
+                                認證
+                                <v-divider />
+                                {{ item.certification }}
+                            </v-col>
+                            <v-col cols="4">
+                                臨床研究/文獻
+                                <v-divider />
+                                {{ item.report }}
+                            </v-col>
+                        </v-row>
+                    </td>
                 </template>
             </v-data-table>
         </v-card-text>
@@ -141,10 +167,6 @@ export default {
         subtitle: {
             type: String,
             default: ''
-        },
-        materials: {
-            type: Array,
-            default: () => ([])
         }
     },
     data: () => ({
@@ -183,23 +205,29 @@ export default {
             if (this.PermissionName === 'user'
                 || this.PermissionName === 'guest') {
                 return [
-                    { text: '狀態', align: 'start', value: 'status' },
                     { text: '編號', align: 'start', value: 'serial_number' },
                     { text: '原料名稱', value: 'name' },
                     { text: '來源', value: 'origin_name' },
                     { text: '規格1', value: 'spec_1' },
                     { text: '規格2', value: 'spec_2' },
-                    { text: '產地', value: 'origin' }
+                    { text: '產地', value: 'origin' },
+                    { text: '功能', value: 'function' },
+                    { text: '', value: 'data-table-expand' }
                 ];
             }
             return [
-                { text: '狀態', align: 'start', value: 'status' },
                 { text: '編號', align: 'start', value: 'serial_number' },
                 { text: '原料名稱', value: 'name' },
                 { text: '來源', value: 'origin_name' },
                 { text: '規格1', value: 'spec_1' },
                 { text: '規格2', value: 'spec_2' },
-                { text: '產地', value: 'origin' }
+                { text: '產地', value: 'origin' },
+                // { text: '專利', value: 'material_patent' },
+                // { text: '認證', value: 'material_certification' },
+                // { text: '臨床研究/文獻', value: 'material_clinic' },
+                { text: '功能', value: 'function' },
+                { text: '操作', value: 'actions', sortable: false },
+                { text: '', value: 'data-table-expand' }
             ];
         },
         ...mapGetters({
@@ -212,6 +240,9 @@ export default {
         dialog(val) {
             if (!val) this.close();
         }
+    },
+    mounted() {
+        if (this.Materials.length === 0) this.$store.dispatch('actionFetchMaterials');
     },
     methods: {
         editItem(item) {
