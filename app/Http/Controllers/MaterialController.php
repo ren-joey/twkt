@@ -43,7 +43,7 @@ class MaterialController extends Controller
             || $permissionName === 'agent'
             || $permissionName === 'company') {
                 $root = $category_serial_number.'-'.$user->userInformation->serial_number;
-                $material = Material::where('serial_number', 'like', $root)
+                $material = Material::where('serial_number', 'like', '%'.$root.'%')
                     ->orderBy('serial_number', 'desc')
                     ->first();
 
