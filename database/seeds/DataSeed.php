@@ -30,44 +30,60 @@ class DataSeed {
 
     const permissionGroups = [
         [
+            'col_name' => 'guest',
+            'tw_name' => '訪客',
+            'permission' => '',
+            'menus' => ['materials', 'settings'],
+            'bg_color' => '#1b5e20',
+            'text_color' => '#ffffff'
+        ],
+        [
             'col_name' => 'admin',
             'tw_name' => '管理員',
             'permission' => '',
-            'menus' => ['materials', 'orders', 'quotations', 'settings']
+            'menus' => ['materials', 'orders', 'quotations', 'settings'],
+            'bg_color' => '#999999',
+            'text_color' => '#ffffff'
         ],
         [
             'col_name' => 'agent',
             'tw_name' => '專員',
             'permission' => '',
-            'menus' => ['materials', 'orders', 'quotations', 'settings']
+            'menus' => ['materials', 'orders', 'quotations', 'settings'],
+            'bg_color' => '#999999',
+            'text_color' => '#ffffff'
         ],
         [
             'col_name' => 'company',
             'tw_name' => '廠商',
             'permission' => '',
-            'menus' => ['materials', 'quotations', 'settings']
+            'menus' => ['materials', 'quotations', 'settings'],
+            'bg_color' => '#faba59',
+            'text_color' => '#ffffff'
         ],
         [
             'col_name' => 'user',
             'tw_name' => '用戶',
             'permission' => '',
-            'menus' => ['materials', 'orders', 'settings']
+            'menus' => ['materials', 'orders', 'settings'],
+            'bg_color' => '#1b5e20',
+            'text_color' => '#ffffff'
         ],
     ];
 
     const materialColumns = [
-        ['col_name' => 'name','tw_name' => '原料名稱','col_option' => '','type' => 'text'],
+        ['col_name' => 'name','tw_name' => '原料名稱','col_option' => '','type' => 'text', 'description' => '原料名稱 (含原料品牌) (例: Quali®-C 維生素 C)'],
         ['col_name' => 'moq','tw_name' => 'MOQ','col_option' => '','type' => 'text'],
-        ['col_name' => 'price','tw_name' => '報價','col_option' => '','type' => 'text'],
-        ['col_name' => 'spec_1','tw_name' => '規格一','col_option' => '','type' => 'text_array'],
-        ['col_name' => 'spec_2','tw_name' => '規格二','col_option' => '粉末,顆粒,油狀,液狀,膏狀,片狀,膠狀,糖漿,其它','type' => 'checkbox'],
+        // ['col_name' => 'price','tw_name' => '報價','col_option' => '','type' => 'text'],
+        ['col_name' => 'spec_1','tw_name' => '規格一','col_option' => '','type' => 'text_array', 'description' => '(例: 多酚 Polyphenol 90%)'],
+        ['col_name' => 'spec_2','tw_name' => '規格二','col_option' => '粉末,顆粒,油狀,液狀,膏狀,片狀,膠狀,糖漿,其它','type' => 'radio'],
         ['col_name' => 'origin_name','tw_name' => '原廠名稱','col_option' => '','type' => 'text'],
         ['col_name' => 'origin','tw_name' => '原料產地','col_option' => '台灣,美國,日本,韓國,中國,法國,沖繩,德國,瑞士,泰國,英國,荷蘭,澳洲,祕魯,印度,印尼,巴西,丹麥,智利,挪威,冰島,波蘭,瑞典,北歐,非洲,義大利,加拿大,以色列,阿根廷,摩洛哥,比利時,墨西哥,愛爾蘭,葡萄牙,俄羅斯,紐西蘭,夏威夷,馬來西亞,斯里蘭卡,哥倫比亞,其它','type' => 'select'],
         ['col_name' => 'patent','tw_name' => '專利','col_option' => '無,功效專利,製程專利,其它','type' => 'checkbox'],
         ['col_name' => 'certification','tw_name' => '認證','col_option' => '無,猶太認證 KOSHER,清真認證 HALAL,非基改 Non-GMO,食品GMP認證,ISO認證,HACCP認證,FSSC22000,ESCOP認證,MSC認證,CE歐盟認證,USDA認證,FDA-GRAS認證,USP美國藥典,ECOCERT有機認證,Organic有機認證,其它','type' => 'checkbox'],
         ['col_name' => 'report','tw_name' => '臨床研究 /文獻報告','col_option' => '','type' => 'text'],
         ['col_name' => 'function','tw_name' => '功能','col_option' => '生髮,腦力,視力,口腔,骨骼,心肺,肝臟,心血管,血糖,血壓,血脂,腸胃,睡眠,抗壓/紓壓,免疫力,抗過敏,抗癌,抗發炎,抗氧化 ,性功能(男),性功能(女),攝護腺,女性泌尿道,經前症候群/更年期,體重控制,排便順暢,皮膚美容,美白,除臭,增加吸收率,兒童,銀髮族,其它','type' => 'checkbox'],
-        ['col_name' => 'allergen','tw_name' => '原料來源含有過敏原','col_option' => '奶類及其製品,蛋類及其製品,魚類及其製品,甲殼類及其製品,大豆類及其製品,堅果類及其製品,花生及其製品,芝麻及其製品,芒果及其製品,含麩質之穀物其製品','type' => 'checkbox'],
+        ['col_name' => 'allergen','tw_name' => '原料來源含有過敏原','col_option' => '無,奶類及其製品,蛋類及其製品,魚類及其製品,甲殼類及其製品,大豆類及其製品,堅果類及其製品,花生及其製品,芝麻及其製品,芒果及其製品,含麩質之穀物其製品','type' => 'radio'],
         ['col_name' => 'feature','tw_name' => '原料特性','col_option' => '水溶,油溶,怕光,怕熱,酸鹼,其它','type' => 'checkbox'],
         ['col_name' => 'process','tw_name' => '加工製程','col_option' => '','type' => 'text'],
         ['col_name' => 'dosage_form','tw_name' => '適用劑型','col_option' => '粉包,硬膠囊,軟膠囊,打錠,水劑,其它','type' => 'checkbox'],
@@ -75,7 +91,7 @@ class DataSeed {
         ['col_name' => 'gov_limit','tw_name' => '衛福部法規限制','col_option' => '','type' => 'text'],
         ['col_name' => 'dosage_amount','tw_name' => '建議劑量','col_option' => '','type' => 'text'],
         ['col_name' => 'image_json','tw_name' => '上傳產品資訊 (jpg./pdf.檔案)','col_option' => '產品資料,規格表,COA,MSDS,營養標示,進出口報單','type' => 'checkbox'],
-        ['col_name' => 'cuzo','tw_name' => '常備庫存','col_option' => '有,無,其它','type' => 'radio'],
+        ['col_name' => 'cuzo','tw_name' => '常備庫存','col_option' => '有,無','type' => 'radio'],
         ['col_name' => 'comment','tw_name' => '其他','col_option' => '','type' => 'text'],
     ];
 

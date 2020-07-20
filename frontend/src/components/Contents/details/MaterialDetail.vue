@@ -277,6 +277,11 @@ export default {
         editMaterialFetching: 'N'
     }),
     computed: {
+        editable() {
+            return this.PermissionName === 'agent'
+                || this.PermissionName === 'admin'
+                || this.UserInfo.id === this.material.created_by;
+        },
         inputAttributes() {
             return [
                 { disabled: this.editMode === 'N' },
@@ -285,35 +290,11 @@ export default {
                 { dense: true }
             ];
         },
-        badgeColor() {
-            const permissionName = this.UserInfo.permission_group.col_name;
-            if (['user', 'guest'].indexOf(permissionName) > -1) {
-                return {
-                    textColor: 'white',
-                    color: 'success'
-                };
-            }
-            if (permissionName === 'agent') {
-                return {
-                    textColor: 'indigo',
-                    color: 'white'
-                };
-            }
-            if (permissionName === 'company') {
-                return {
-                    textColor: 'white',
-                    color: 'teal'
-                };
-            }
-            return {
-                textColor: 'white',
-                color: 'indigo'
-            };
-        },
         ...mapGetters({
-            PermissionName: 'getPermissionName'
+            PermissionName: 'getPermissionName',
+            UserInfo: 'getUserInfo'
         }),
-        ...mapState(['Fetching', 'Users', 'UserInfo'])
+        ...mapState(['Fetching', 'Users'])
     },
     watch: {
         dialog(val) {

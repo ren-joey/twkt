@@ -6,8 +6,8 @@
         >
             <v-card-title class="headline d-flex justify-space-between align-center">
                 <div class="d-flex align-center">
-                    <v-list-item-avatar :color="badgeColor.color" size="48">
-                        <span :class="[`${badgeColor.textColor}--text`]" style="font-size: 0.75em;">
+                    <v-list-item-avatar :color="BadgeColor.color" size="48">
+                        <span :class="[`${BadgeColor.textColor}--text`]" style="font-size: 0.75em;">
                             {{ user.user_information.name.toUpperCase().substring(0, 2) }}
                         </span>
                     </v-list-item-avatar>
@@ -340,33 +340,9 @@ export default {
                 { dense: true }
             ];
         },
-        badgeColor() {
-            const permissionName = this.user.permission_group.col_name;
-            if (['user', 'guest'].indexOf(permissionName) > -1) {
-                return {
-                    textColor: 'white',
-                    color: 'success'
-                };
-            }
-            if (permissionName === 'agent') {
-                return {
-                    textColor: 'indigo',
-                    color: 'white'
-                };
-            }
-            if (permissionName === 'company') {
-                return {
-                    textColor: 'white',
-                    color: 'teal'
-                };
-            }
-            return {
-                textColor: 'white',
-                color: 'indigo'
-            };
-        },
         ...mapGetters({
-            PermissionName: 'getPermissionName'
+            PermissionName: 'getPermissionName',
+            BadgeColor: 'getOwnBadgeColor'
         }),
         ...mapState(['Fetching', 'Users', 'UserInfo'])
     },

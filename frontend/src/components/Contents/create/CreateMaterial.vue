@@ -55,16 +55,42 @@
                             </v-col>
 
                             <v-col cols="12" v-else-if="col.type === 'checkbox'">
-                                <v-row class="px-4">
-                                    <v-checkbox class="mr-4"
+                                <div class="checkbox-group">
+                                    <div class="text-subtitle-1 mb-4">
+                                        <div class="label-primary" />
+                                        <span>{{ col.tw_name }}</span>
+                                    </div>
+                                    <v-divider />
+                                    <v-row class="px-4">
+                                        <v-checkbox class="mr-4"
+                                                    v-for="(option, optionIdx) in col.col_option.split(',')"
+                                                    :key="`${option}_${optionIdx}`"
+                                                    v-model="material[col.col_name]"
+                                                    :label="option"
+                                                    :value="option"
+                                        />
+                                    </v-row>
+                                </div>
+                            </v-col>
+
+                            <v-col cols="12" v-else-if="col.type === 'radio'">
+                                <div class="radio-group">
+                                    <div class="text-subtitle-1 mb-4">
+                                        {{ col.tw_name }}
+                                    </div>
+                                    <v-divider />
+                                    <v-row class="px-4">
+                                        <v-radio-group v-model="material[col.col_name]">
+                                            <v-radio
+                                                class="mr-4"
                                                 v-for="(option, optionIdx) in col.col_option.split(',')"
                                                 :key="`${option}_${optionIdx}`"
-                                                v-model="material[col.col_name]"
                                                 :label="option"
                                                 :value="option"
-                                    />
-                                </v-row>
-                                <v-divider />
+                                            />
+                                        </v-radio-group>
+                                    </v-row>
+                                </div>
                             </v-col>
 
                             <v-col cols="12" v-else-if="col.type === 'select'">
@@ -254,3 +280,26 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+.checkbox-group,
+.radio-group {
+    padding: 12px 24px;
+    background-color: rgba(0, 0, 0, 0.06);
+    transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.12);
+    }
+}
+
+.label-primary {
+    display: inline-block;
+    margin-right: 5px;
+    width: 8px;
+    height: 15px;
+    background-color: #6495ed;
+    border-radius: 5px;
+    transform: translateY(3px);
+}
+</style>

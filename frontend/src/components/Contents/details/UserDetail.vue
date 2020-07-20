@@ -325,28 +325,7 @@ export default {
         },
         badgeColor() {
             const permissionName = this.user.permission_group.col_name;
-            if (['user', 'guest'].indexOf(permissionName) > -1) {
-                return {
-                    textColor: 'white',
-                    color: 'success'
-                };
-            }
-            if (permissionName === 'agent') {
-                return {
-                    textColor: 'indigo',
-                    color: 'white'
-                };
-            }
-            if (permissionName === 'company') {
-                return {
-                    textColor: 'white',
-                    color: 'teal'
-                };
-            }
-            return {
-                textColor: 'white',
-                color: 'indigo'
-            };
+            return this.$store.getters.getBadgeColor(permissionName);
         },
         ...mapGetters({
             PermissionName: 'getPermissionName'

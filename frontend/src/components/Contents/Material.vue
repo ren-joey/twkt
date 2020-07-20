@@ -78,7 +78,7 @@
 
 <script>
 import bus from '@/bus';
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import DialogAddMaterial from '../Dialog/AddMaterial';
 import MaterialTable from './tables/MaterialTable';
 import MaterialDetail from './details/MaterialDetail';
@@ -119,8 +119,7 @@ export default {
             UnpublishedMaterials: 'getUnpublishedMaterials',
             IncompleteMaterials: 'getIncompleteMaterials',
             Materials: 'getMaterials'
-        }),
-        ...mapState(['Materials'])
+        })
     },
     mounted() {
         this.$store.dispatch('actionFetchMaterials');

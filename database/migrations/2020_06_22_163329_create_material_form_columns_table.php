@@ -20,6 +20,7 @@ class CreateMaterialFormColumnsTable extends Migration
             $table->text('tw_name');
             $table->text('col_option');
             $table->text('type');
+            $table->text('description')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

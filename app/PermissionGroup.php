@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PermissionGroup extends Model
 {
-    protected $visible = ['id', 'col_name', 'tw_name'];
+    protected $visible = ['id', 'col_name', 'tw_name', 'bg_color', 'text_color'];
 
     public function userInformation()
     {

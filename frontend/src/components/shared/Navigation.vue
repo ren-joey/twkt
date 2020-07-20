@@ -11,9 +11,9 @@
                 rounded=""
         >
             <v-list-item twoLine>
-                <v-list-item-avatar :color="badgeColor.color" size="48">
+                <v-list-item-avatar :color="BadgeColor.color" size="48">
                     <!-- <img src="https://randomuser.me/api/portraits/men/81.jpg" /> -->
-                    <span :class="[`${badgeColor.textColor}--text`]" class="text-md">
+                    <span :class="[`${BadgeColor.textColor}--text`]" class="text-md">
                         {{ UserInfo.user_information.name.toUpperCase().substring(0, 2) }}
                     </span>
                 </v-list-item-avatar>
@@ -32,7 +32,7 @@
                         <v-chip
                             class="ma-1"
                             small=""
-                            v-bind="badgeColor"
+                            v-bind="BadgeColor"
                             v-else
                         >
                             <v-icon small>mdi-shield-check</v-icon>
@@ -150,7 +150,8 @@ export default {
     computed: {
         ...mapState(['UserInfo', 'Fetching']),
         ...mapGetters({
-            PermissionName: 'getPermissionName'
+            PermissionName: 'getPermissionName',
+            BadgeColor: 'getOwnBadgeColor'
         }),
         items() {
             return [
@@ -245,31 +246,6 @@ export default {
                     src: 'https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg'
                 };
             } return {};
-        },
-        badgeColor() {
-            const permissionName = this.UserInfo.permission_group.col_name;
-            if (['user', 'guest'].indexOf(permissionName) > -1) {
-                return {
-                    textColor: 'white',
-                    color: 'success'
-                };
-            }
-            if (permissionName === 'agent') {
-                return {
-                    textColor: 'indigo',
-                    color: 'white'
-                };
-            }
-            if (permissionName === 'company') {
-                return {
-                    textColor: 'white',
-                    color: 'teal'
-                };
-            }
-            return {
-                textColor: 'white',
-                color: 'indigo'
-            };
         },
         navAppendAttrs() {
             const permissionName = this.UserInfo.permission_group.col_name;

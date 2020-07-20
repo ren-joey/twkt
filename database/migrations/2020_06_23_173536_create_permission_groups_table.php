@@ -19,6 +19,8 @@ class CreatePermissionGroupsTable extends Migration
             $table->char('col_name', 32)->unique();
             $table->char('tw_name', 32);
             $table->text('permission')->nullable();
+            $table->char('bg_color', 32)->nullable();
+            $table->char('text_color', 32)->nullable();
 
             $table->timestamps();
             $table->softDeletes();

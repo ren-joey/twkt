@@ -3,7 +3,7 @@
         :clippedLeft="$vuetify.breakpoint.lgAndUp"
         app
         dark
-        v-bind="headerAttrs"
+        v-bind="BarColor"
     >
         <v-app-bar-nav-icon v-if="UserInfo && UserInfo.is_login === 'Y'" @click.stop="toggleNavigation" />
         <v-toolbar-title
@@ -93,22 +93,15 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import bus from '@/bus';
 
 export default {
     computed: {
-        ...mapState(['UserInfo']),
-        headerAttrs() {
-            const { is_login } = this.UserInfo;
-            if (is_login === 'N') return { color: 'green darken-4' };
-
-            const permissionName = this.UserInfo.permission_group.col_name;
-            if (permissionName === 'guest'
-                || permissionName === 'user') return { color: 'green darken-1' };
-            if (permissionName === 'company') return { color: 'teal darken-1' };
-            return { color: 'blue darken-3' };
-        }
+        ...mapGetters({
+            UserInfo: 'getUserInfo',
+            BarColor: 'getBarColor'
+        })
     },
     methods: {
         toggleNavigation() {

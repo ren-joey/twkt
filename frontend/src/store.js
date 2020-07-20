@@ -9,7 +9,8 @@ export default new Vuex.Store({
         Layout: {
             menus: [],
             material_form_columns: [],
-            material_categories: []
+            material_categories: [],
+            permission_groups: []
         },
         Page: undefined,
         Snack: {},
@@ -28,10 +29,52 @@ export default new Vuex.Store({
     },
     getters: {
         getPage: (state) => state.Page,
-        getPermissionName: (state) => state.UserInfo.permission_group.col_name,
+        getPermissionName: (state) => {
+            if (state.UserInfo.is_login === 'N') return 'guest';
+            return state.UserInfo.permission_group.col_name;
+        },
         getUserInfo: (state) => state.UserInfo,
         getMaterialCategories: (state) => state.Layout.material_categories,
         getMaterialColumns: (state) => state.Layout.material_form_columns,
+
+        // Permission Groups 相關顏色
+        getPermissionGroups: (state) => state.Layout.permission_groups
+            .filter((group) => group.col_name !== 'guest')
+            .map((group) => ({
+                text: group.tw_name,
+                value: group.id,
+                ...group
+            })),
+        getPermissionGroupGuest: (state) => state.Layout.permission_groups
+            .find((group) => group.col_name === 'guest'),
+        getPermissionGroupUser: (state) => state.Layout.permission_groups
+            .find((group) => group.col_name === 'user'),
+        getPermissionGroupCompany: (state) => state.Layout.permission_groups
+            .find((group) => group.col_name === 'company'),
+        getPermissionGroupAgent: (state) => state.Layout.permission_groups
+            .find((group) => group.col_name === 'agent'),
+        getPermissionGroupAdmin: (state) => state.Layout.permission_groups
+            .find((group) => group.col_name === 'admin'),
+        getBarColor: (state, getters) => {
+            const permissionName = getters.getPermissionName;
+            if (permissionName === 'guest') return { color: getters.getPermissionGroupGuest.bg_color };
+            if (permissionName === 'user') return { color: getters.getPermissionGroupUser.bg_color };
+            if (permissionName === 'company') return { color: getters.getPermissionGroupCompany.bg_color };
+            return { color: getters.getPermissionGroupAdmin.bg_color };
+        },
+        getOwnBadgeColor: (state, getters) => {
+            const permissionName = getters.getPermissionName;
+            if (permissionName === 'guest') return { textColor: 'white', color: getters.getPermissionGroupGuest.bg_color };
+            if (permissionName === 'user') return { textColor: 'white', color: getters.getPermissionGroupUser.bg_color };
+            if (permissionName === 'company') return { textColor: 'white', color: getters.getPermissionGroupCompany.bg_color };
+            return { textColor: 'white', color: getters.getPermissionGroupAdmin.bg_color };
+        },
+        getBadgeColor: (state, getters) => (permissionName = 'guest') => {
+            if (permissionName === 'guest') return { textColor: 'white', color: getters.getPermissionGroupGuest.bg_color };
+            if (permissionName === 'user') return { textColor: 'white', color: getters.getPermissionGroupUser.bg_color };
+            if (permissionName === 'company') return { textColor: 'white', color: getters.getPermissionGroupCompany.bg_color };
+            return { textColor: 'white', color: getters.getPermissionGroupAdmin.bg_color };
+        },
 
         // 所有原物料
         getMaterials: (state) => state.Materials,

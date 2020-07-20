@@ -13,7 +13,7 @@
                         <v-col cols="12" sm="6">
                             <v-select
                                 v-model="userData.permission_group_id"
-                                :items="permissionGroups"
+                                :items="PermissionGroups"
                                 label="用戶類型"
                                 rounded
                                 filled
@@ -105,6 +105,7 @@
 <script>
 import bus from '@/bus';
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 
 export default {
     data() {
@@ -174,39 +175,32 @@ export default {
                     '頭髮', '腦力', '睡眠', '視力', '骨骼', '口腔', '肝臟功能', '心臟功能', '心血管', '免疫', '腸胃', '排便', '皮膚美容', '美白', '抗癌', '抗發炎', '調節血糖', '調節血脂', '調節血壓', '抗憂鬱', '抗過敏', '控制體重', '男性功能', '女性泌尿道', '經期/更年期', '除臭', '增加吸收率'
                 ]
             },
-            permissionGroups: [],
             groupIdLock: 'N'
         };
+    },
+    computed: {
+        ...mapGetters({
+            PermissionGroups: 'getPermissionGroups'
+        })
     },
     watch: {
         dialog(val) {
             if (val === false) this.groupIdLock = 'N';
         },
         'userData.permission_group_id'(id) {
-            const userType = this.permissionGroups.find((group) => group.id === id).col_name;
+            const userType = this.PermissionGroups.find((group) => group.id === id).col_name;
             this.getSerialNumber(userType);
         }
     },
     mounted() {
-        axios({
-            method: 'GET',
-            url: 'api/permission-groups'
-        }).then((res) => {
-            this.permissionGroups = res.data.map((group) => ({
-                text: group.tw_name,
-                value: group.id,
-                ...group
-            }));
-        });
-
         bus.$on('addUser', (userType) => {
             this.dialog = true;
             if (userType) {
                 this.getSerialNumber(userType);
-                this.userData.permission_group_id = this.permissionGroups.find((group) => group.col_name === userType).id;
+                this.userData.permission_group_id = this.PermissionGroups.find((group) => group.col_name === userType).id;
                 this.groupIdLock = 'Y';
             } else {
-                this.userData.permission_group_id = this.permissionGroups.find((group) => group.col_name === 'user').id;
+                this.userData.permission_group_id = this.PermissionGroups.find((group) => group.col_name === 'user').id;
             }
         });
     },

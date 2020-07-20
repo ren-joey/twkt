@@ -22,7 +22,9 @@ class PermissionGroupsTableSeeder extends Seeder
             {
                 $group = PermissionGroup::create([
                     'col_name' => $groupData['col_name'],
-                    'tw_name' => $groupData['tw_name']
+                    'tw_name' => $groupData['tw_name'],
+                    'bg_color' => $groupData['bg_color'],
+                    'text_color' => $groupData['text_color']
                 ]);
                 foreach($groupData['menus'] as $colName)
                 {
