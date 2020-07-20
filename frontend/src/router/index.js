@@ -62,11 +62,14 @@ router.beforeEach((to, from, next) => {
             store.dispatch('actionCheckLogin'),
             store.dispatch('actionFetchLayout')
         ]).then((data) => {
-            if (to.name !== 'login'
-                    && data.is_login === 'N') next({ name: 'login' });
-            else if (to.name === 'login'
-                    && data.is_login === 'Y') next({ name: 'index' });
-            else next();
+            const { is_login } = data[0];
+            if (to.name === 'login') {
+                if (is_login === 'Y') next({ name: 'index' });
+                else if (is_login === 'N') next();
+            } else if (to.name !== 'login') {
+                if (is_login === 'Y') next();
+                else if (is_login === 'N') next({ name: 'login' });
+            }
         }).catch(() => {
             next({ name: 'login' });
         });
