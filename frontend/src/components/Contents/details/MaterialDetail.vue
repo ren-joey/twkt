@@ -13,219 +13,101 @@
                 <v-divider />
                 <v-form>
                     <v-container>
-                        <v-row class="align-center">
-                            <v-col cols="4" md="2">
+                        <v-row align="center">
+                            <v-col cols="6">
+                                <v-select
+                                    :items="categories"
+                                    v-bind="inputAttributes"
+                                    hideDetails
+                                    label="分類"
+                                    itemText="name"
+                                    itemValue="serial_number"
+                                    :value="material.serial_number.split('-')[0]"
+                                    disabled
+                                />
+                            </v-col>
+
+                            <v-col cols="6">
                                 <v-text-field
                                     v-model="material.serial_number"
-                                    label="流水號"
+                                    label="流水號 (系統自動生成)"
+                                    hideDetails
                                     disabled
                                     dense
                                 />
                             </v-col>
-                            <v-col cols="6" md="4">
-                                <v-text-field
-                                    v-model="material.name"
-                                    :counter="editMode === 'N' ? false : 32"
-                                    label="名稱"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
                         </v-row>
 
-                        <v-row>
-                            <v-col
-                                cols="12"
-                                sm="4"
+                        <v-row v-for="(col, idx) in Columns" :key="`material_form_column_${idx}`">
+                            <v-col cols="12"
+                                   v-if="col.type === 'text'
+                                       || col.type === 'text_array'"
                             >
                                 <v-text-field
-                                    v-model="material.moq"
-                                    label="MOQ"
-                                    prependIcon="mdi-identifier"
+                                    v-model="material[col.col_name]"
+                                    hideDetails
+                                    :label="col.tw_name"
+                                    :placeholder="col.description"
+                                    dense
                                     v-bind="inputAttributes"
                                 />
                             </v-col>
-                        </v-row>
 
-                        <v-row>
-                            <v-col
-                                cols="12"
-                                sm="8"
-                            >
-                                <v-text-field
-                                    v-model="material.spec_1"
-                                    label="規格一"
-                                    prependIcon="mdi-email"
-                                    v-bind="inputAttributes"
-                                />
+                            <v-col cols="12" v-else-if="col.type === 'checkbox'">
+                                <div class="checkbox-group">
+                                    <div class="text-subtitle-1">
+                                        <div class="label-primary" />
+                                        <span>{{ col.tw_name }}</span>
+                                        <span v-if="editMode === 'N'" style="color: #999;">&nbsp;{{ material[col.col_name] || '未填寫' }}</span>
+                                    </div>
+                                    <template v-if="editMode === 'Y'">
+                                        <v-divider class="mt-4" />
+                                        <v-row class="px-4">
+                                            <v-checkbox class="mr-4"
+                                                        v-for="(option, optionIdx) in col.col_option.split(',')"
+                                                        :key="`${option}_${optionIdx}`"
+                                                        v-model="material[col.col_name]"
+                                                        :label="option"
+                                                        :value="option"
+                                            />
+                                        </v-row>
+                                    </template>
+                                </div>
                             </v-col>
-                        </v-row>
 
-                        <v-row>
-                            <v-col cols="12" sm="6">
-                                <v-text-field
-                                    v-model="material.spec_2"
-                                    label="規格二"
-                                    prependIcon="mdi-phone"
-                                    v-bind="inputAttributes"
-                                />
+                            <v-col cols="12" v-else-if="col.type === 'radio'">
+                                <div class="radio-group">
+                                    <div class="text-subtitle-1">
+                                        {{ col.tw_name }}
+                                        <span v-if="editMode === 'N'" style="color: #999;">&nbsp;{{ material[col.col_name] || '未填寫' }}</span>
+                                    </div>
+                                    <template v-if="editMode === 'Y'">
+                                        <v-divider class="mt-4" />
+                                        <v-row class="px-4">
+                                            <v-radio-group v-model="material[col.col_name]">
+                                                <v-radio
+                                                    class="mr-4"
+                                                    v-for="(option, optionIdx) in col.col_option.split(',')"
+                                                    :key="`${option}_${optionIdx}`"
+                                                    :label="option"
+                                                    :value="option"
+                                                />
+                                            </v-radio-group>
+                                        </v-row>
+                                    </template>
+                                </div>
                             </v-col>
-                        </v-row>
 
-                        <v-row>
-                            <v-col cols="12" sm="6">
-                                <v-text-field
-                                    v-model="material.origin_name"
-                                    label="原廠名稱"
-                                    prependIcon="mdi-fax"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="12">
-                                <v-text-field
-                                    v-model="material.origin"
-                                    label="原料產地"
-                                    prependIcon="mdi-map-marker"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="12">
-                                <v-text-field
-                                    v-model="material.patent"
-                                    label="專利"
-                                    prependIcon="mdi-web"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.certification"
-                                    label="認證"
-                                    prependIcon="mdi-card-account-phone"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="12">
-                                <v-text-field
-                                    v-model="material.report"
-                                    label="臨床研究/文獻報告"
-                                    prependIcon="mdi-face-agent"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.function"
-                                    label="功能"
-                                    prependIcon="mdi-account-tie"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.allergen"
-                                    label="原料來源含有過敏原"
-                                    prependIcon="mdi-card-account-phone"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.feature"
-                                    label="原料特性"
-                                    prependIcon="mdi-account-tie"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.process"
-                                    label="加工製程"
-                                    prependIcon="mdi-card-account-phone"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.dosage_form"
-                                    label="適用劑型"
-                                    prependIcon="mdi-account-tie"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.list"
-                                    label="可供食品使用原料彙整一覽表"
-                                    prependIcon="mdi-card-account-phone"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.gov_limit"
-                                    label="衛福部法規限制"
-                                    prependIcon="mdi-account-tie"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.dosage_amount"
-                                    label="建議劑量"
-                                    prependIcon="mdi-card-account-phone"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.image_json"
-                                    label="上傳產品資訊 (jpg./pdf.檔案)"
-                                    prependIcon="mdi-account-tie"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.cuzo"
-                                    label="常備庫存"
-                                    prependIcon="mdi-card-account-phone"
-                                    v-bind="inputAttributes"
-                                />
-                            </v-col>
-                            <v-col cols="6" sm="4">
-                                <v-text-field
-                                    v-model="material.comment"
-                                    label="其他"
-                                    prependIcon="mdi-card-account-phone"
-                                    v-bind="inputAttributes"
-                                />
+                            <v-col cols="12" v-else-if="col.type === 'select'">
+                                <v-row class="px-4">
+                                    <v-select
+                                        :items="col.col_option.split(',')"
+                                        v-bind="inputAttributes"
+                                        hideDetails
+                                        :label="col.tw_name"
+                                        v-model="material[col.col_name]"
+                                    />
+                                </v-row>
                             </v-col>
                         </v-row>
 
@@ -277,6 +159,12 @@ export default {
         editMaterialFetching: 'N'
     }),
     computed: {
+        categories() {
+            return this.Categories.map((cate) => ({
+                name: `${cate.serial_number} ${cate.tw_name}`,
+                serial_number: cate.serial_number
+            }));
+        },
         editable() {
             return this.PermissionName === 'agent'
                 || this.PermissionName === 'admin'
@@ -292,7 +180,9 @@ export default {
         },
         ...mapGetters({
             PermissionName: 'getPermissionName',
-            UserInfo: 'getUserInfo'
+            UserInfo: 'getUserInfo',
+            Categories: 'getMaterialCategories',
+            Columns: 'getMaterialColumns'
         }),
         ...mapState(['Fetching', 'Users'])
     },

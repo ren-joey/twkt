@@ -89,7 +89,7 @@ class DataSeed {
         ['col_name' => 'dosage_form','tw_name' => '適用劑型','col_option' => '粉包,硬膠囊,軟膠囊,打錠,水劑,其它','type' => 'checkbox'],
         ['col_name' => 'list','tw_name' => '可供食品使用原料彙整一覽表 (依衛生福利部食品藥物管理)','col_option' => '草、木本植物類 (1),草、木本植物類 (2),草、木本植物類來源製取之原料,藻類及其來源製取之原料,菇蕈類,微生物及其來源製取之原料,海洋動物、水產類、爬蟲類及其來源製取之原料,禽、畜類及其來源製取之原料,其它','type' => 'select'],
         ['col_name' => 'gov_limit','tw_name' => '衛福部法規限制','col_option' => '','type' => 'text'],
-        ['col_name' => 'dosage_amount','tw_name' => '建議劑量','col_option' => '','type' => 'text'],
+        ['col_name' => 'dosage_amount','tw_name' => '建議劑量','col_option' => '','type' => 'text', 'description' => '(例: 50-100mg/天)'],
         ['col_name' => 'image_json','tw_name' => '上傳產品資訊 (jpg./pdf.檔案)','col_option' => '產品資料,規格表,COA,MSDS,營養標示,進出口報單','type' => 'checkbox'],
         ['col_name' => 'cuzo','tw_name' => '常備庫存','col_option' => '有,無','type' => 'radio'],
         ['col_name' => 'comment','tw_name' => '其他','col_option' => '','type' => 'text'],

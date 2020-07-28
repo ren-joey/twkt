@@ -35,6 +35,7 @@ export default new Vuex.Store({
         },
         getUserInfo: (state) => state.UserInfo,
         getMaterialCategories: (state) => state.Layout.material_categories,
+        getMaterialCategoryBySerialNumber: (state) => (serial_number) => state.Layout.material_categories.find((cate) => cate.serial_number === serial_number),
         getMaterialColumns: (state) => state.Layout.material_form_columns,
 
         // Permission Groups 相關顏色
@@ -94,6 +95,7 @@ export default new Vuex.Store({
         getIncompleteMaterials: (state) => state.Materials.filter((m) => m.status !== 'complete'
                 && m.status !== 'published'
                 && m.status !== 'unpublished'),
+        getMaterialsByCategory: (state) => (cate) => state.Materials.filter((m) => m.serial_number.indexOf(cate) > -1),
 
         getCompleteOrders: (state) => state.Orders.filter((m) => m.status === 'complete'),
         getIncompleteOrders: (state) => state.Orders.filter((m) => m.status !== 'complete'),

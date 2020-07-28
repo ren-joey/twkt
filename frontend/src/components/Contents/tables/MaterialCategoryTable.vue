@@ -14,114 +14,12 @@
             <v-data-table
                 v-model="selected"
                 :headers="headers"
-                :items="materials"
+                :items="MaterialCategories"
                 itemKey="serial_number"
                 @click:row="rowClickHandler"
             >
-                <template v-slot:top>
-                    <v-dialog v-model="dialog" maxWidth="500px">
-                        <v-card :loading="Fetching.actionEditMaterial === 'Y'">
-                            <v-card-title>
-                                <span class="headline">{{ formTitle }}</span>
-                            </v-card-title>
-
-                            <v-card-text>
-                                <v-container>
-                                    <v-row>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.name" label="Dessert name" />
-                                        </v-col>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.calories" label="Calories" />
-                                        </v-col>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.fat" label="Fat (g)" />
-                                        </v-col>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.carbs" label="Carbs (g)" />
-                                        </v-col>
-                                        <v-col cols="12"
-                                               sm="6"
-                                               md="4"
-                                        >
-                                            <v-text-field v-model="editedItem.protein" label="Protein (g)" />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-card-text>
-
-                            <v-card-actions>
-                                <v-spacer />
-                                <v-btn color="blue darken-1"
-                                       text
-                                       @click="close"
-                                >
-                                    Cancel
-                                </v-btn>
-                                <v-btn color="blue darken-1"
-                                       text
-                                       @click="save"
-                                >
-                                    Save
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                </template>
-                <template v-slot:item.status="{ item }">
-                    <v-chip class="ma-2"
-                            small
-                            color="success"
-                            v-if="item.status === 'published'"
-                    >
-                        上架中
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            v-if="item.status === 'unpublished'"
-                    >
-                        未上架
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            v-if="item.status === 'complete'"
-                    >
-                        已完成
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            v-if="item.status === 'edit'"
-                    >
-                        編輯
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            color="red"
-                            textColor="white"
-                            v-else-if="item.status === 'confirm'"
-                    >
-                        待確認
-                    </v-chip>
-                    <v-chip class="ma-2"
-                            small
-                            outlined
-                            color="red"
-                            v-else-if="item.status === 'verify'"
-                    >
-                        審核中
-                    </v-chip>
+                <template v-slot:item.total="{ item }">
+                    {{ $store.getters.getMaterialsByCategory(item.serial_number).length }} 筆
                 </template>
             </v-data-table>
         </v-card-text>
@@ -134,20 +32,13 @@ import { mapState, mapGetters } from 'vuex';
 
 export default {
     props: {
-        id: {
-            type: String,
-            default: ''
-        },
-        subtitle: {
-            type: String,
-            default: ''
-        },
-        materials: {
-            type: Array,
-            default: () => ([])
+        setCategorySelected: {
+            type: Function,
+            default: () => {}
         }
     },
     data: () => ({
+        subtitle: '總覽',
         bus,
         dialog: false,
         // items: [
@@ -180,31 +71,15 @@ export default {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
         },
         headers() {
-            if (this.PermissionName === 'user'
-                || this.PermissionName === 'guest') {
-                return [
-                    { text: '狀態', align: 'start', value: 'status' },
-                    { text: '編號', align: 'start', value: 'serial_number' },
-                    { text: '原料名稱', value: 'name' },
-                    { text: '來源', value: 'origin_name' },
-                    { text: '規格1', value: 'spec_1' },
-                    { text: '規格2', value: 'spec_2' },
-                    { text: '產地', value: 'origin' }
-                ];
-            }
             return [
-                { text: '狀態', align: 'start', value: 'status' },
-                { text: '編號', align: 'start', value: 'serial_number' },
-                { text: '原料名稱', value: 'name' },
-                { text: '來源', value: 'origin_name' },
-                { text: '規格1', value: 'spec_1' },
-                { text: '規格2', value: 'spec_2' },
-                { text: '產地', value: 'origin' }
+                { text: '流水號', align: 'start', value: 'serial_number' },
+                { text: '類別名稱', align: 'start', value: 'tw_name' },
+                { text: '筆數', align: 'end', value: 'total' }
             ];
         },
         ...mapGetters({
             PermissionName: 'getPermissionName',
-            Materials: 'getCompleteMaterials'
+            MaterialCategories: 'getMaterialCategories'
         }),
         ...mapState(['Fetching', 'UserInfo'])
     },
@@ -244,8 +119,8 @@ export default {
                 this.close();
             }, 2000);
         },
-        rowClickHandler(material) {
-            this.$router.push({ name: 'material', params: { material_id: material.id } });
+        rowClickHandler(cate) {
+            this.setCategorySelected(cate);
         }
     }
 };

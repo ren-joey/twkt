@@ -26,7 +26,24 @@
 
         <v-container v-else-if="!$route.params.material_id">
             <template v-if="activeTab === 0">
-                <MaterialTable :subtitle="'總覽'" :materials="Materials" />
+                <ul v-if="categorySelected !== null" class="v-breadcrumbs theme--light">
+                    <li>
+                        <a class="v-breadcrumbs__item" @click="categorySelected = null">原物料總覽</a>
+                    </li>
+                    <li class="v-breadcrumbs__divider">
+                        <i aria-hidden="true" class="v-icon notranslate mdi mdi-chevron-right theme--light" />
+                    </li>
+                    <li>
+                        <div class="v-breadcrumbs__item">原物料資料</div>
+                    </li>
+                </ul>
+
+                <MaterialCategoryTable v-if="categorySelected === null" :setCategorySelected="setCategorySelected" />
+
+                <MaterialTable v-else
+                               :subtitle="`${categorySelected.serial_number} ${categorySelected.tw_name}`"
+                               :materials="$store.getters.getMaterialsByCategory(categorySelected.serial_number)"
+                />
             </template>
             <template v-else-if="activeTab === 1">
                 <MaterialTable :subtitle="'上架中'" :materials="PublishedMaterials" />
@@ -80,17 +97,19 @@
 import bus from '@/bus';
 import { mapGetters } from 'vuex';
 import DialogAddMaterial from '../Dialog/AddMaterial';
+import MaterialCategoryTable from './tables/MaterialCategoryTable';
 import MaterialTable from './tables/MaterialTable';
 import MaterialDetail from './details/MaterialDetail';
 import CreateMaterial from './create/CreateMaterial';
 
 export default {
     components: {
-        DialogAddMaterial, MaterialTable, MaterialDetail, CreateMaterial
+        DialogAddMaterial, MaterialCategoryTable, MaterialTable, MaterialDetail, CreateMaterial
     },
     data: () => ({
         bus,
-        activeTab: 0
+        activeTab: 0,
+        categorySelected: null
     }),
     computed: {
         history() {
@@ -118,11 +137,17 @@ export default {
             PublishedMaterials: 'getPublishedMaterials',
             UnpublishedMaterials: 'getUnpublishedMaterials',
             IncompleteMaterials: 'getIncompleteMaterials',
-            Materials: 'getMaterials'
+            Materials: 'getMaterials',
+            MaterialCategories: 'getMaterialCategories'
         })
     },
     mounted() {
         this.$store.dispatch('actionFetchMaterials');
+    },
+    methods: {
+        setCategorySelected(str) {
+            this.categorySelected = str;
+        }
     }
 };
 </script>
