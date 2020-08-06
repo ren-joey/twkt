@@ -6,7 +6,7 @@
         >
             <v-card-title class="headline d-flex justify-space-between align-center">
                 <div class="d-flex align-center">
-                    訂單資料
+                    需求單資料
                 </div>
             </v-card-title>
             <v-card-text>
@@ -33,7 +33,7 @@
                             >
                                 <v-textarea
                                     v-model="order.description"
-                                    label="訂單描述"
+                                    label="需求單描述"
                                     placeholder="請詳細敘述產品所要達到的功能"
                                     hideDetails
                                     autoGrow

@@ -23,7 +23,7 @@ class MaterialController extends Controller
                 ->orWhere('created_by', '=', $user->id)
                 ->cursor(), Response::HTTP_OK);
         } else if ($permissionName === 'user') {
-            return response(Material::cursor(), Response::HTTP_OK);
+            return response(Material::where('state', '=', 'published'), Response::HTTP_OK);
         }
     }
 

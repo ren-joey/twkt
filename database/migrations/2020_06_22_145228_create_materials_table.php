@@ -23,11 +23,12 @@ class CreateMaterialsTable extends Migration
             // $table->bigInteger('quotation_id')->nullable();                 // 4報價 5報價日期
             $table->text('spec_1');                                     // *6規格一
             $table->text('spec_2');                                     // *7規格二
+            $table->char('origin_material', 32)->nullable();            // 來源
             $table->char('origin_name', 32)->nullable();                // 8原廠名稱
             $table->char('origin', 32);                                 // *9原料產地
             $table->text('patent')->nullable();                         // *10專利
             $table->text('certification')->nullable();                              // *11認證
-            $table->integer('report')->nullable();                      // 12臨床研究/文獻報告
+            $table->char('report', 32)->nullable();                      // 12臨床研究/文獻報告
             $table->text('function')->nullable();                                   // *13功能
             $table->text('allergen')->nullable();                       // 14原料來源含有過敏原
             $table->text('feature')->nullable();                        // 15原料特性

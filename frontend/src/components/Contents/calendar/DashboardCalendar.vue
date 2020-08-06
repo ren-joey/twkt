@@ -96,7 +96,7 @@ export default {
         value: '',
         events: [],
         colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-        names: ['訂單']
+        names: ['需求單']
     }),
     methods: {
         getEvents() {

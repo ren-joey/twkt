@@ -15,6 +15,47 @@ class UserInformationTableSeeder extends Seeder
      */
     public function run()
     {
+        foreach(DataSeed::existUser as $userData)
+        {
+            $existUser = UserInformation::where('serial_number', '=', $userData['serial_number'])->first();
+            if (!$existUser)
+            {
+                $pattern = substr($userData['serial_number'], 0, 2);
+                $permissionName = '';
+                switch($pattern) {
+                    case 'CE':
+                        $permissionName = 'user';
+                        break;
+                    case 'AG':
+                        $permissionName = 'agent';
+                        break;
+                    case 'CO':
+                        $permissionName = 'company';
+                        break;
+                    case 'AD':
+                        $permissionName = 'admin';
+                        break;
+                    default:
+                        $permissionName = 'user';
+                        break;
+                }
+
+                $password = $userData['password'];
+                unset($userData['password']);
+                $permissionGroup = PermissionGroup::where('col_name', '=', $permissionName)->first();
+                $userData['permission_group_id'] = $permissionGroup->id;
+                $userInfo = UserInformation::create($userData);
+                $userInfo->save();
+
+                $user = new User;
+                $user->name = $userData['name'];
+                $user->email = $userData['email'];
+                $user->password = $password;
+                $user->user_information_id = $userInfo->id;
+                $user->save();
+            }
+        }
+
         foreach(DataSeed::users as $userData)
         {
             $existUser = UserInformation::where('serial_number', '=', $userData['serial_number'])->first();

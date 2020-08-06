@@ -169,7 +169,7 @@ export default {
                 {
                     icon: 'mdi-semantic-web',
                     'icon-alt': 'mdi-shape-plus',
-                    text: '原物料',
+                    text: this.PermissionName === 'admin' ? '原物料管理' : '原物料總覽',
                     permission: 'Y',
                     model: true,
                     to: {
@@ -181,7 +181,7 @@ export default {
                 },
                 {
                     icon: 'mdi-clipboard-list',
-                    text: '我的訂單',
+                    text: this.PermissionName === 'admin' ? '需求單管理' : '我的需求單',
                     permission: this.PermissionName !== 'company' ? 'Y' : 'N',
                     to: {
                         name: 'order'
@@ -192,7 +192,7 @@ export default {
                 },
                 {
                     icon: 'mdi-account',
-                    text: '用戶管理',
+                    text: '客戶管理',
                     permission: this.PermissionName === 'admin' || this.PermissionName === 'agent' ? 'Y' : 'N',
                     to: {
                         name: 'user'
@@ -203,7 +203,7 @@ export default {
                 },
                 {
                     icon: 'mdi-cog',
-                    text: '設定',
+                    text: '個人資料',
                     permission: 'Y',
                     to: {
                         name: 'setting'

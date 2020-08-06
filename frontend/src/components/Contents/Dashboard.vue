@@ -9,13 +9,13 @@
                         dark
                     >
                         <v-card-title class="headline justify-center">
-                            未送出的訂單
+                            未送出的需求單
                         </v-card-title>
 
                         <v-card-subtitle class="display-4 font-weight-black">0</v-card-subtitle>
 
                         <v-card-actions>
-                            <v-btn text>前往我的訂單</v-btn>
+                            <v-btn text>前往我的需求單</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -26,13 +26,13 @@
                         dark
                     >
                         <v-card-title class="headline justify-center">
-                            處理中的訂單
+                            處理中的需求單
                         </v-card-title>
 
                         <v-card-subtitle class="display-4 font-weight-black">0</v-card-subtitle>
 
                         <v-card-actions>
-                            <v-btn text>前往我的訂單</v-btn>
+                            <v-btn text>前往我的需求單</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -43,13 +43,13 @@
                         dark
                     >
                         <v-card-title class="headline justify-center">
-                            已完成訂單
+                            已完成需求單
                         </v-card-title>
 
                         <v-card-subtitle class="display-4 font-weight-black">0</v-card-subtitle>
 
                         <v-card-actions>
-                            <v-btn text>前往我的訂單</v-btn>
+                            <v-btn text>前往我的需求單</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -65,7 +65,7 @@
                     bottom
                     v-model="snackbar"
         >
-            您有 1 筆新的原物料訂單
+            您有 1 筆新的原物料需求單
             <v-btn
                 color="pink"
                 @click="snackbar = false"

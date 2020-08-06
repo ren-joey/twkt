@@ -111,33 +111,35 @@
                             </v-col>
                         </v-row>
 
-                        <div v-if="editMode === 'N'" class="d-flex justify-center">
-                            <v-btn class="ma-2"
-                                   color="success"
-                                   xLarge
-                                   @click="editMode = 'Y'"
-                            >
-                                <v-icon left>mdi-pencil</v-icon> 修改
-                            </v-btn>
-                        </div>
-                        <div v-else class="d-flex justify-center">
-                            <v-btn class="ma-2"
-                                   text
-                                   color="grey"
-                                   xLarge
-                                   @click="editCancel"
-                            >
-                                取消
-                            </v-btn>
-                            <v-btn class="ma-2"
-                                   color="primary"
-                                   xLarge
-                                   :loading="editUserFetching === 'Y'"
-                                   @click="editSubmit"
-                            >
-                                <v-icon left>mdi-check</v-icon> 確認修改
-                            </v-btn>
-                        </div>
+                        <template v-if="PermissionName !== 'user'">
+                            <div v-if="editMode === 'N'" class="d-flex justify-center">
+                                <v-btn class="ma-2"
+                                       color="success"
+                                       xLarge
+                                       @click="editMode = 'Y'"
+                                >
+                                    <v-icon left>mdi-pencil</v-icon> 修改
+                                </v-btn>
+                            </div>
+                            <div v-else class="d-flex justify-center">
+                                <v-btn class="ma-2"
+                                       text
+                                       color="grey"
+                                       xLarge
+                                       @click="editCancel"
+                                >
+                                    取消
+                                </v-btn>
+                                <v-btn class="ma-2"
+                                       color="primary"
+                                       xLarge
+                                       :loading="editUserFetching === 'Y'"
+                                       @click="editSubmit"
+                                >
+                                    <v-icon left>mdi-check</v-icon> 確認修改
+                                </v-btn>
+                            </div>
+                        </template>
                     </v-container>
                 </v-form>
             </v-card-text>
