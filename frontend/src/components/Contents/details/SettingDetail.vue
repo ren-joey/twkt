@@ -112,7 +112,7 @@
                         <v-row>
                             <v-col cols="6" sm="4">
                                 <v-text-field
-                                    v-model="user.user_information.liaison"
+                                    v-model="user.user_information.liaison_name"
                                     label="聯絡人"
                                     prependIcon="mdi-account-tie"
                                     v-bind="inputAttributes"
@@ -369,7 +369,7 @@ export default {
                 params: this.user.user_information
             }).then((res) => {
                 this.$store.commit('setUserInfo', res.data);
-                this.user = JSON.parse(JSON.stringify(res.data));
+                // this.user = JSON.parse(JSON.stringify(res.data));
             }).catch((e) => {
                 alert(e);
             }).finally(() => {

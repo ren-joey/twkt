@@ -211,6 +211,17 @@ export default {
                     click: () => {
                         this.$router.push({ name: 'setting' });
                     }
+                },
+                {
+                    icon: 'mdi-currency-usd',
+                    text: '付款',
+                    permission: this.PermissionName === 'user' ? 'Y' : 'N',
+                    to: {
+                        name: 'payment'
+                    },
+                    click: () => {
+                        this.$router.push({ name: 'payment' });
+                    }
                 }
             // {
             //     icon: 'mdi-chevron-down',

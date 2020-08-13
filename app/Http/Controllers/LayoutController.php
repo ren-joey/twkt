@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\MaterialCategory;
 use App\MaterialFormColumn;
+use App\OrderFormColumn;
 use App\PermissionGroup;
 use App\UserInformation;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class LayoutController extends Controller
         return response([
             // 'menus' => $menus,
             'material_form_columns' => MaterialFormColumn::cursor(),
+            'order_form_columns' => OrderFormColumn::cursor(),
             'material_categories' => MaterialCategory::cursor(),
             'permission_groups' => PermissionGroup::cursor()
         ], Response::HTTP_OK);

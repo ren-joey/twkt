@@ -42,13 +42,15 @@ class UserController extends Controller
         $userInformationData['permission_group_id'] = PermissionGroup::where('col_name', '=', 'user')->first()->id;
         $userInformation = UserInformation::create($userInformationData);
 
-        $password = $request->password;
         $input = $request->only('name', 'email', 'password');
         $input['password'] = bcrypt($input['password']);
         $input['user_information_id'] = $userInformation->id;
         $user = User::create($input);
         $oClient = OClient::where('password_client', 1)->first();
-        return $this->getTokenAndRefreshToken($oClient, $user->email, $password);
+        // return response($user, Response::HTTP_OK);
+
+        Auth::attempt(['email' => request('email'), 'password' => request('password')]);
+        return $this->getTokenAndRefreshToken($oClient, request('email'), request('password'));
     }
 
     public function create(Request $request) {
@@ -206,6 +208,8 @@ class UserController extends Controller
             $userInformation = $user->userInformation;
             $userInformation->update($request->except(['create_at', 'id', 'permission_group_id', 'serial_number', 'update_at', 'permission_group']));
             $user->update($request->only(['name', 'email']));
+            $user = $user->toArray();
+            $user['is_login'] = 'Y';
             return response($user, Response::HTTP_OK);
         }
         return response([], Response::HTTP_UNAUTHORIZED);

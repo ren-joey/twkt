@@ -37,6 +37,7 @@ export default new Vuex.Store({
         getMaterialCategories: (state) => state.Layout.material_categories,
         getMaterialCategoryBySerialNumber: (state) => (serial_number) => state.Layout.material_categories.find((cate) => cate.serial_number === serial_number),
         getMaterialColumns: (state) => state.Layout.material_form_columns,
+        getOrderColumns: (state) => state.Layout.order_form_columns,
 
         // Permission Groups 相關顏色
         getPermissionGroups: (state) => state.Layout.permission_groups

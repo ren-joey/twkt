@@ -49,32 +49,22 @@ export default {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
         },
         headers() {
-            if (this.PermissionName === 'user'
-                || this.PermissionName === 'guest') {
-                return [
-                    { text: '編號', align: 'start', value: 'serial_number' },
-                    { text: '原料名稱', value: 'name' },
-                    { text: '來源', value: 'origin_name' },
-                    { text: '規格1', value: 'spec_1' },
-                    { text: '規格2', value: 'spec_2' },
-                    { text: '產地', value: 'origin' },
-                    { text: '功能', value: 'function' },
-                    { text: '', value: 'data-table-expand' }
-                ];
-            }
+            // if (this.PermissionName === 'user'
+            //     || this.PermissionName === 'guest') {
+            //     return [
+            //         { text: '編號', align: 'start', value: 'serial_number' },
+            //         { text: '原料名稱', value: 'name' },
+            //         { text: '來源', value: 'origin_name' },
+            //         { text: '規格1', value: 'spec_1' },
+            //         { text: '規格2', value: 'spec_2' },
+            //         { text: '產地', value: 'origin' },
+            //         { text: '功能', value: 'function' },
+            //         { text: '', value: 'data-table-expand' }
+            //     ];
+            // }
             return [
-                { text: '編號', align: 'start', value: 'serial_number' },
-                { text: '原料名稱', value: 'name' },
-                { text: '來源', value: 'origin_name' },
-                { text: '規格1', value: 'spec_1' },
-                { text: '規格2', value: 'spec_2' },
-                { text: '產地', value: 'origin' },
-                // { text: '專利', value: 'material_patent' },
-                // { text: '認證', value: 'material_certification' },
-                // { text: '臨床研究/文獻', value: 'material_clinic' },
-                { text: '功能', value: 'function' },
-                { text: '操作', value: 'actions', sortable: false },
-                { text: '', value: 'data-table-expand' }
+                { text: '需求功效', value: 'function' },
+                { text: '建立日期', value: 'created_at' }
             ];
         },
         ...mapGetters({

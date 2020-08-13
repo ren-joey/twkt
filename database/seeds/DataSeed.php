@@ -121,6 +121,20 @@ class DataSeed {
         ],
     ];
 
+    const orderColumns = [
+        ['col_name' => 'function', 'tw_name' => '產品需求', 'col_option' => '生髮 (Hair),抗過敏 (Anti-allergy),腦力 (Brain),抗癌 (Anticancer),視力 (Vision),抗發炎 (Anti-inflammatory),口腔 (Mouth),抗氧化 (Anti-oxidation),骨骼 (Bone),增加吸收率 (Increase absorption),心肺 (Heart/Lung),除臭 (Deodorant),肝臟 (Liver),性功能(男/女) (Sexual function (male/female),心血管 (Cardiovascular),女性泌尿道 (Female urinary tract),血糖 (Blood sugar),經前症候群/更年期 (PMS / menopause),血脂 (Blood pressure),體重控制 (Weight control),血壓 (Blood lipids),排便順暢 (Defecation),腸胃 (Stomach),皮膚美容 (Skin beauty),抗壓力/紓壓 (Anti-stress / Relief),美白 (Whitening),睡眠 (Sleep),兒童 (Child),免疫力 (Immunity),銀髮族 (Seniors),其他 (Others)', 'type' => 'radio'],
+        ['col_name' => 'dosage_form', 'tw_name' => '劑型', 'col_option' => '硬膠囊 (葷),粉包,硬膠囊 (素食),錠劑,軟膠囊 (葷),液劑,軟膠囊 (素食),其他', 'type' => 'radio'],
+        ['col_name' => 'each_pill', 'tw_name' => '每粒/錠(單位mg)', 'col_option' => '', 'type' => 'text', 'required' => 'N'],
+        ['col_name' => 'each_bag', 'tw_name' => '每包(g)', 'col_option' => '', 'type' => 'text', 'required' => 'N'],
+        ['col_name' => 'each_bottle', 'tw_name' => '每瓶(ml)', 'col_option' => '', 'type' => 'text', 'required' => 'N'],
+        ['col_name' => 'pill_in_box', 'tw_name' => '每瓶(盒)/粒(錠)', 'col_option' => '', 'type' => 'text', 'required' => 'N'],
+        ['col_name' => 'bag_in_box', 'tw_name' => '每盒/包', 'col_option' => '', 'type' => 'text', 'required' => 'N'],
+        ['col_name' => 'bottle_in_box', 'tw_name' => '每盒/瓶', 'col_option' => '', 'type' => 'text', 'required' => 'N'],
+        ['col_name' => 'package', 'tw_name' => '包裝', 'col_option' => '打片入盒,粉包,液劑,膠囊入瓶,錠劑入瓶', 'type' => 'radio'],
+        ['col_name' => 'test', 'tw_name' => '有無須代為申請第三方公正單位認證/檢驗', 'col_option' => '清真認證 (Halal),外銷食品英文衛生證明,食品檢驗 (SGS),外銷食品英文檢驗報告,食品查驗登記 (維生素/礦物質),外銷食品英文自由銷售證明', 'type' => 'checkbox'],
+        ['col_name' => 'description', 'tw_name' => '其他', 'col_option' => '', 'type' => 'textarea', 'required' => 'N']
+    ];
+
     const materialColumns = [
         ['col_name' => 'name','tw_name' => '原料名稱','col_option' => '','type' => 'text', 'description' => '原料名稱 (含原料品牌) (例: Quali®-C 維生素 C)'],
         ['col_name' => 'moq','tw_name' => 'MOQ','col_option' => '','type' => 'text'],

@@ -72,7 +72,8 @@
                                     </v-btn>
                                 </div>
                                 <div class="my-2">
-                                    <v-btn block
+                                    <v-btn @click="setActiveCard('register')"
+                                           block
                                            text
                                            color="primary"
                                     >
@@ -93,7 +94,7 @@
                     <v-card v-else-if="activeCard === 'register'"
                             class="mx-auto px-4"
                             width="400"
-                            :loading="Fetching.actionLogin"
+                            :loading="fetchingRegister === 'Y'"
                     >
                         <v-card-text>
                             <div>
@@ -103,38 +104,48 @@
                                 {{ $t('LOGIN_TITLE') }}
                             </p>
                             <p>
-                                {{ $t('LOGIN_PLEASE_LOGIN') }}
+                                {{ $t('REGISTER_PLEASE_ENTER') }}
                             </p>
-                            <v-form ref="form"
-                                    v-model="userInput.valid"
+                            <v-form ref="formRegister"
+                                    v-model="registerValid"
                                     lazyValidation
                             >
                                 <v-text-field
-                                    v-model="userInput.email"
-                                    :rules="rules.email"
+                                    v-model="registerData.name"
+                                    :rules="rules.name"
                                     :counter="30"
-                                    label="Email Address"
+                                    :label="$t('USERNAME')"
                                     required
                                 />
                                 <v-text-field
-                                    v-model="userInput.password"
+                                    v-model="registerData.email"
+                                    :rules="rules.email"
+                                    :counter="30"
+                                    :label="$t('EMAIL_ADDRESS')"
+                                    required
+                                />
+                                <v-text-field
+                                    v-model="registerData.password"
                                     :rules="rules.password"
                                     :counter="20"
-                                    label="Password"
+                                    :label="$t('PASSWORD')"
                                     type="password"
                                     required
                                 />
-                                <v-row justify="end">
-                                    <v-switch v-model="userInput.rememberMe"
-                                              :label="$t('LOGIN_REMEMBER_ME')"
-                                    />
-                                </v-row>
+                                <v-text-field
+                                    v-model="registerData.password_confirmation"
+                                    :rules="rules.password_confirmation"
+                                    :counter="20"
+                                    :label="$t('PASSWORD_CONFIRMATION')"
+                                    type="password"
+                                    required
+                                />
                                 <transition name="fade">
                                     <v-alert
                                         dense
                                         outlined
                                         type="error"
-                                        v-if="userInput.loginAlert"
+                                        v-if="registerAlert"
                                     >
                                         {{ $t('LOGIN_ALERT_USER_INPUT_ERROR') }}
                                     </v-alert>
@@ -145,7 +156,7 @@
                                            color="primary"
                                            large
                                     >
-                                        {{ $t('CONFIRM') }}
+                                        {{ $t('REGISTER_CONFIRM') }}
                                     </v-btn>
                                 </div>
                                 <div class="my-2">
@@ -174,8 +185,9 @@
 </template>
 
 <script>
+import axios from 'axios';
 import bus from '@/bus';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 
 export default {
     props: {
@@ -195,10 +207,19 @@ export default {
                 loginAlert: false,
                 valid: false
             },
+            registerData: {
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: ''
+            },
+            registerAlert: false,
+            registerValid: false,
+            fetchingRegister: 'N',
             rules: {
                 name: [
-                    (v) => !!v || 'Name is required',
-                    (v) => (v && v.length <= 30) || 'Name must be less than 10 characters'
+                    (v) => !!v || this.$t('REGISTER_NAME_RULE_1'),
+                    (v) => (v && v.length <= 30) || this.$t('REGISTER_NAME_RULE_2')
                 ],
                 email: [
                     (v) => !!v || this.$t('LOGIN_EMAIL_RULE_1'),
@@ -206,13 +227,20 @@ export default {
                 ],
                 password: [
                     (v) => !!v || this.$t('LOGIN_PW_RULE_1'),
-                    (v) => v.length >= 6 || this.$t('LOGIN_PW_RULE_2')
+                    (v) => (v && v.length >= 6) || this.$t('LOGIN_PW_RULE_2')
+                ],
+                password_confirmation: [
+                    () => this.registerData.password === this.registerData.password_confirmation
+                        || this.$t('REGISTER_PASSWORD_CONFIRMATION')
                 ]
             }
         };
     },
     computed: {
-        ...mapState(['Fetching', 'UserInfo'])
+        ...mapState(['Fetching', 'UserInfo']),
+        ...mapGetters({
+            PermissionGroupUser: 'getPermissionGroupUser'
+        })
     },
     watch: {
         'userInput.valid'(next) {
@@ -235,11 +263,54 @@ export default {
                 }).catch(() => {
                     this.userInput.loginAlert = true;
                 });
-            } else {
-                this.userInput.loginAlert = true;
-            }
+            } else this.userInput.loginAlert = true;
+        },
+        register() {
+            if (this.fetchingRegister === 'Y') return;
+
+            if (this.$refs.formRegister.validate()) {
+                this.fetchingRegister = 'Y';
+
+                axios({
+                    method: 'GET',
+                    url: 'api/get-serial-number',
+                    params: {
+                        user_type: this.PermissionGroupUser.col_name
+                    }
+                }).then((res) => {
+                    const serial_number = res.data;
+
+                    axios({
+                        method: 'POST',
+                        url: 'api/register',
+                        params: {
+                            serial_number,
+                            ...this.registerData
+                        }
+                    }).then((resRegister) => {
+                        this.fetchingRegister = 'N';
+                        // 建立成功
+
+                        if (resRegister.data.is_login === 'Y') {
+                            this.$store.commit('setUserInfo', resRegister.data);
+                            this.$router.push({
+                                name: 'index'
+                            });
+                        }
+                    }).catch((e) => {
+                        alert(e);
+                    }).finally(() => {
+                        this.dialog = false;
+                    });
+                }).catch((e) => {
+                    alert(e.data.message);
+                });
+            } else this.registerAlert = true;
         },
         setActiveCard(str) {
+            if (str === 'login') this.$refs.formRegister.reset();
+            else if (str === 'register') this.$refs.form.reset();
+
             this.activeCard = str;
         },
         ...mapActions(['actionLogin'])

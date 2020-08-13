@@ -19,11 +19,11 @@ class MaterialController extends Controller
             || $permissionName === 'agent') {
                 return response(Material::cursor(), Response::HTTP_OK);
         } else if ($permissionName === 'company') {
-            return response(Material::where('status', '=', 'complete')
+            return response(Material::where('status', '=', 'complete')->get()
                 ->orWhere('created_by', '=', $user->id)
                 ->cursor(), Response::HTTP_OK);
         } else if ($permissionName === 'user') {
-            return response(Material::where('state', '=', 'published'), Response::HTTP_OK);
+            return response(Material::where('status', '=', 'published')->get(), Response::HTTP_OK);
         }
     }
 

@@ -33,8 +33,9 @@ class OrderController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:32',
-            'description' => 'required',
+            'function' => 'required|max:32',
+            'dosage_form' => 'required|max:32',
+            'package' => 'required|max:32',
             'order_details' => 'required',
         ]);
 
@@ -42,12 +43,14 @@ class OrderController extends Controller
             return response($validator->errors(), Response::HTTP_BAD_REQUEST);
         }
 
-        $order = new Order;
-        $order->name = $request->input('name');
-        $order->description = $request->input('description');
-        $order->order_details = $request->input('order_details');
-        $order->created_by = $user->id;
-        $order->save();
+        $input = $request->toArray();
+        $input['created_by'] = $user->id;
+        $order = Order::create($input);
+        // $order->name = $request->input('name');
+        // $order->description = $request->input('description');
+        // $order->order_details = $request->input('order_details');
+        // $order->created_by = $user->id;
+        // $order->save();
 
         $materials = explode(',', $request->order_details);
         foreach($materials as $materialData)

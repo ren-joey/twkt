@@ -156,7 +156,7 @@ export default {
         },
         inputAttributes() {
             return [
-                { disabled: this.editMode === 'N' },
+                // { disabled: this.editMode === 'N' },
                 { filled: true },
                 { rounded: true },
                 { dense: true }

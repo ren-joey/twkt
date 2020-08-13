@@ -48,6 +48,11 @@ const router = new Router({
             component: () => import('@/views/Setting')
         },
         {
+            path: '/payment',
+            name: 'payment',
+            component: () => import('@/views/Payment')
+        },
+        {
             path: '/dev',
             name: 'dev',
             component: () => import('@/views/Dev')
