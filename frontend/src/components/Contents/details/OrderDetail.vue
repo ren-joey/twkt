@@ -6,7 +6,44 @@
         >
             <v-card-title class="headline d-flex justify-space-between align-center">
                 <div class="d-flex align-center">
-                    新增需求單
+                    需求單明細
+                    <v-chip class="ma-2"
+                            small
+                            color="success"
+                            v-if="order.status === 'complete'"
+                    >
+                        已完成
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            outlined
+                            color="success"
+                            v-else-if="order.status === 'quoting'"
+                    >
+                        詢價中
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            color="red"
+                            textColor="white"
+                            v-else-if="order.status === 'confirm'"
+                    >
+                        待確認
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            outlined
+                            color="red"
+                            v-else-if="order.status === 'verify'"
+                    >
+                        審核中
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            v-if="order.status === 'edit'"
+                    >
+                        編輯
+                    </v-chip>
                 </div>
             </v-card-title>
             <v-card-text>
@@ -43,6 +80,7 @@
                                                     v-model="order[col.col_name]"
                                                     :label="option"
                                                     :value="option"
+                                                    :disabled="inputDisabled"
                                         />
                                     </v-row>
                                 </div>
@@ -63,6 +101,7 @@
                                                 :key="`${option}_${optionIdx}`"
                                                 :label="option"
                                                 :value="option"
+                                                :disabled="inputDisabled"
                                             />
                                         </v-radio-group>
                                     </v-row>
@@ -77,6 +116,7 @@
                                         hideDetails
                                         :label="col.tw_name + (col.required === 'Y' ? '  (必填)': '')"
                                         v-model="order[col.col_name]"
+                                        :disabled="inputDisabled"
                                     />
                                 </v-row>
                             </v-col>
@@ -95,6 +135,7 @@
                                     rounded
                                     dense
                                     filled
+                                    :disabled="inputDisabled"
                                 />
                             </v-col>
                         </v-row>
@@ -121,7 +162,7 @@
                                                 <th class="text-left">原物料名稱</th>
                                                 <th class="text-left">功能</th>
                                                 <th class="text-left">數量</th>
-                                                <th class="text-left" />
+                                                <!-- <th class="text-left" /> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -132,18 +173,18 @@
                                                 <td>{{ o.material.name }}</td>
                                                 <td>{{ o.material.function }}</td>
                                                 <td>{{ o.amount }}</td>
-                                                <td>
+                                                <!-- <td>
                                                     <v-btn icon color="secondary">
                                                         <v-icon>mdi-close</v-icon>
                                                     </v-btn>
-                                                </td>
+                                                </td> -->
                                             </tr>
                                         </tbody>
                                     </template>
                                 </v-simple-table>
                             </v-col>
 
-                            <v-col cols="12" v-if="PermissionName === 'agent' || PermissionName === 'company'">
+                            <v-col cols="12" v-if="PermissionName === 'agent' || PermissionName === 'admin'">
                                 <v-btn text
                                        xLarge
                                        block
@@ -169,23 +210,26 @@
                         </transition>
 
                         <div class="d-flex justify-center">
-                            <v-btn class="ma-2"
+                            <!-- <v-btn class="ma-2"
                                    color="primary"
                                    xLarge
                                    :loading="submitFetching === 'Y'"
                                    @click="save"
                             >
                                 <v-icon left>mdi-content-save</v-icon> 儲存
-                            </v-btn>
+                            </v-btn> -->
 
-                            <!-- <v-btn class="ma-2"
+                            <v-btn class="ma-2"
                                    color="success"
                                    xLarge
                                    :loading="submitFetching === 'Y'"
-                                   @click="saveAndSend"
+                                   v-if="order.status === 'verify'
+                                       && (PermissionName === 'admin'
+                                           || PermissionName === 'agent')"
+                                   @click="save"
                             >
-                                <v-icon left>mdi-send</v-icon> 儲存並送出
-                            </v-btn> -->
+                                <v-icon left>mdi-send</v-icon> 審核完成並詢價
+                            </v-btn>
                         </div>
                     </v-container>
                 </v-form>
@@ -274,11 +318,15 @@ export default {
         publishedMaterials: {
             type: Array,
             default: () => ([])
+        },
+        order: {
+            type: Object,
+            default: () => ({})
         }
     },
     data: () => ({
         dataPrepare: 'N',
-        order: {},
+        orderAlias: {},
         selectedMaterialsTemp: [],
         headers: [
             { text: '原物料名稱', value: 'name' },
@@ -286,17 +334,24 @@ export default {
         ],
         selectedMaterials: [],
         submitFetching: 'N',
+        editMode: 'N',
         alert: false,
         selectMaterialDialog: false
     }),
     computed: {
         inputAttributes() {
             return [
-                // { disabled: true },
+                { disabled: this.inputDisabled },
                 { filled: true },
                 { rounded: true },
                 { dense: true }
             ];
+        },
+        inputDisabled() {
+            return this.editMode === 'N'
+                        && !(this.order.status === 'verify'
+                                && (this.PermissionName === 'admin'
+                                    || this.PermissionName === 'agent'));
         },
         ...mapGetters({
             Columns: 'getOrderColumns',
@@ -305,13 +360,21 @@ export default {
     },
     mounted() {
         this.Columns.forEach((col) => {
-            if (col.type === 'text'
-                || col.type === 'select'
-                || col.type === 'radio'
-                || col.type === 'text_array'
-                || col.textarea) this.order[col.col_name] = '';
-            else if (col.type === 'checkbox') this.order[col.col_name] = [];
+            this.orderAlias[col.col_name] = this.order[col.col_name];
+            // if (col.type === 'text'
+            //     || col.type === 'select'
+            //     || col.type === 'radio'
+            //     || col.type === 'text_array'
+            //     || col.textarea) this.orderAlias[col.col_name] = this.order[col.col_name];
+            // else if (col.type === 'checkbox') this.order[col.col_name] = [];
         });
+
+        if (this.order.order_details) {
+            this.selectedMaterials = this.order.order_details.split(',').map((m) => ({
+                material: this.$store.getters.getMaterialById(+m.split(':')[0]),
+                amount: 1
+            }));
+        }
 
         this.$nextTick(() => { this.dataPrepare = 'Y'; });
     },
@@ -340,17 +403,17 @@ export default {
             return valid;
         },
         save() {
-            // if (this.selectedMaterials.lendth === 0) {
-            //     alert('至少需選擇一項原物料');
-            //     return;
-            // }
+            if (this.selectedMaterials.length === 0) {
+                alert('至少需選擇一項原物料');
+                return;
+            }
             if (this.validation() === 'N') return;
 
-            // let order_details = '';
-            // this.selectedMaterials.forEach((o, idx) => {
-            //     if (idx !== 0) order_details += ',';
-            //     order_details += `${o.material.id}:${o.amount}`;
-            // });
+            let order_details = '';
+            this.selectedMaterials.forEach((o, idx) => {
+                if (idx !== 0) order_details += ',';
+                order_details += `${o.material.id}:${o.amount}`;
+            });
             const keys = Object.keys(this.order);
             const order = {};
             keys.forEach((key) => {
@@ -359,11 +422,12 @@ export default {
             });
 
             axios({
-                method: 'POST',
-                url: '/api/order',
+                method: 'patch',
+                url: `/api/order/${this.order.id}`,
                 params: {
-                    status: 'verify',
-                    ...order
+                    ...order,
+                    order_details,
+                    status: 'quoting'
                 }
             }).then(() => {
                 this.$store.dispatch('actionFetchOrders');

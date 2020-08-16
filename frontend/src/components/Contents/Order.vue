@@ -7,30 +7,37 @@
                 </template>
             </v-breadcrumbs>
 
-            <OrderTable v-if="!$route.params.method"
-                        :subtitle="'已完成的需求單'"
-                        :orders="CompleteOrders"
-            />
-            <OrderTable v-if="!$route.params.method"
-                        :subtitle="'未完成的需求單'"
-                        :orders="IncompleteOrders"
-            />
-            <CreateOrder v-else-if="$route.params.method === 'create'"
-                         :publishedMaterials="publishedMaterials"
-            />
+            <template v-if="!$route.params.order_id">
+                <OrderTable v-if="!$route.params.method"
+                            :subtitle="'已完成的需求單'"
+                            :orders="CompleteOrders"
+                />
+                <OrderTable v-if="!$route.params.method"
+                            :subtitle="'未完成的需求單'"
+                            :orders="IncompleteOrders"
+                />
+                <CreateOrder v-else-if="$route.params.method === 'create'"
+                             :publishedMaterials="publishedMaterials"
+                />
 
-            <v-btn
-                bottom
-                color="pink"
-                dark
-                fab
-                fixed
-                right
-                v-if="!$route.params.method"
-                @click="$router.push({ name: 'order', params: { method: 'create' } })"
-            >
-                <v-icon>mdi-plus</v-icon>
-            </v-btn>
+                <v-btn
+                    bottom
+                    color="pink"
+                    dark
+                    fab
+                    fixed
+                    right
+                    v-if="!$route.params.method"
+                    @click="$router.push({ name: 'order', params: { method: 'create' } })"
+                >
+                    <v-icon>mdi-plus</v-icon>
+                </v-btn>
+            </template>
+            <template v-else>
+                <OrderDetail :order="$store.getters.getOrderById(+$route.params.order_id)"
+                             :publishedMaterials="publishedMaterials"
+                />
+            </template>
         </v-container>
     </v-main>
 </template>
@@ -40,11 +47,12 @@ import axios from 'axios';
 import { mapGetters, mapState } from 'vuex';
 import bus from '@/bus';
 import OrderTable from './tables/OrderTable';
+import OrderDetail from './details/OrderDetail';
 import CreateOrder from './create/CreateOrder';
 
 export default {
     components: {
-        OrderTable, CreateOrder
+        OrderTable, OrderDetail, CreateOrder
     },
     data: () => ({
         bus,
@@ -58,6 +66,11 @@ export default {
                 history[0].href = '/#/order';
 
                 history.push({ text: '新增需求單' });
+            } else if (this.$route.params.method === 'detail'
+                && this.$route.params.order_id) {
+                history[0].href = '/#/order';
+
+                history.push({ text: '需求單明細' });
             }
 
             return history;
@@ -69,7 +82,8 @@ export default {
         })
     },
     mounted() {
-        if (this.Orders.length === 0) this.$store.dispatch('actionFetchOrders');
+        this.$store.dispatch('actionFetchOrders');
+        this.$store.dispatch('actionFetchMaterials');
 
         axios({
             method: 'GET',

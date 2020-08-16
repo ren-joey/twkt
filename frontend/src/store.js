@@ -97,7 +97,9 @@ export default new Vuex.Store({
                 && m.status !== 'published'
                 && m.status !== 'unpublished'),
         getMaterialsByCategory: (state) => (cate) => state.Materials.filter((m) => m.serial_number.indexOf(cate) > -1),
+        getMaterialById: (state) => (id) => state.Materials.find((m) => m.id === id),
 
+        getOrderById: (state) => (id) => state.Orders.find((o) => o.id === id),
         getCompleteOrders: (state) => state.Orders.filter((m) => m.status === 'complete'),
         getIncompleteOrders: (state) => state.Orders.filter((m) => m.status !== 'complete'),
         getFetching: (state) => state.Fetching
@@ -167,6 +169,9 @@ export default new Vuex.Store({
                 url: 'api/logout'
             }).then((res) => {
                 commit('setUserInfo', res.data);
+                commit('setMaterials', []);
+                commit('setUsers', []);
+                commit('setOrders', []);
                 resolve(res.data);
             }).catch((e) => {
                 alert(e);

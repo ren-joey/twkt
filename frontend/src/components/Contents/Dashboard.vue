@@ -1,7 +1,7 @@
 <template>
     <v-main>
         <v-container>
-            <v-row>
+            <v-row v-if="false">
                 <v-col col="12" md="4">
                     <v-card
                         color="grey"

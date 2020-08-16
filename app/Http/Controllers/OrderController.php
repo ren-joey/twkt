@@ -35,8 +35,7 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'function' => 'required|max:32',
             'dosage_form' => 'required|max:32',
-            'package' => 'required|max:32',
-            'order_details' => 'required',
+            'package' => 'required|max:32'
         ]);
 
         if ($validator->fails()) {
@@ -52,28 +51,28 @@ class OrderController extends Controller
         // $order->created_by = $user->id;
         // $order->save();
 
-        $materials = explode(',', $request->order_details);
-        foreach($materials as $materialData)
-        {
-            $material_id = explode(':', $materialData)[0];
-            $material_amount = explode(':', $materialData)[1];
+        // $materials = explode(',', $request->order_details);
+        // foreach($materials as $materialData)
+        // {
+        //     $material_id = explode(':', $materialData)[0];
+        //     $material_amount = explode(':', $materialData)[1];
 
-            if (!$material_amount) return response([], Response::HTTP_BAD_REQUEST);
+        //     if (!$material_amount) return response([], Response::HTTP_BAD_REQUEST);
 
-            $orderMaterial = new OrderMaterial;
-            $material = Material::find($material_id);
+        //     $orderMaterial = new OrderMaterial;
+        //     $material = Material::find($material_id);
 
-            if (!$material) return response([], Response::HTTP_BAD_REQUEST);
+        //     if (!$material) return response([], Response::HTTP_BAD_REQUEST);
 
-            $orderMaterial->material_id = $material->id;
-            $orderMaterial->order_id = $order->id;
-            $orderMaterial->amount = $material_amount;
-            $orderMaterial->save();
-        }
+        //     $orderMaterial->material_id = $material->id;
+        //     $orderMaterial->order_id = $order->id;
+        //     $orderMaterial->amount = $material_amount;
+        //     $orderMaterial->save();
+        // }
 
-        $order->orderMaterials->each(function ($orderMaterial) {
-            $orderMaterial->material;
-        });
+        // $order->orderMaterials->each(function ($orderMaterial) {
+        //     $orderMaterial->material;
+        // });
         return response($order, Response::HTTP_OK);
     }
 
@@ -108,7 +107,8 @@ class OrderController extends Controller
             || ($order->status === 'verify' && $permissionName === 'agent')
             || $permissionName === 'admin')
             {
-                $order->update($request->only(['name', 'description', 'order_details']));
+                // $order->update($request->only(['name', 'description', 'order_details']));
+                $order->update($request->all());
                 $order->orderMaterials->each(function ($orderMaterial){
                     $orderMaterial->delete();
                 });

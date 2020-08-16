@@ -13,7 +13,48 @@
                 :items="orders"
                 itemKey="id"
                 class="elevation-1"
-            />
+                @click:row="rowClickHandler"
+            >
+                <template v-slot:item.status="{ item }">
+                    <v-chip class="ma-2"
+                            small
+                            color="success"
+                            v-if="item.status === 'complete'"
+                    >
+                        已完成
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            outlined
+                            color="success"
+                            v-if="item.status === 'quoting'"
+                    >
+                        詢價中
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            color="red"
+                            textColor="white"
+                            v-else-if="item.status === 'confirm'"
+                    >
+                        待確認
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            outlined
+                            color="red"
+                            v-else-if="item.status === 'verify'"
+                    >
+                        審核中
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            v-if="item.status === 'edit'"
+                    >
+                        編輯
+                    </v-chip>
+                </template>
+            </v-data-table>
         </v-card-text>
     </v-card>
 </template>
@@ -63,6 +104,7 @@ export default {
             //     ];
             // }
             return [
+                { text: '狀態', align: 'start', value: 'status' },
                 { text: '需求功效', value: 'function' },
                 { text: '建立日期', value: 'created_at' }
             ];
@@ -109,8 +151,14 @@ export default {
                 this.close();
             }, 2000);
         },
-        rowClickHandler(material) {
-            this.$router.push({ name: 'material', params: { material_id: material.id } });
+        rowClickHandler(order) {
+            this.$router.push({
+                name: 'order',
+                params: {
+                    method: 'detail',
+                    order_id: order.id
+                }
+            });
         }
     }
 };
