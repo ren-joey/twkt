@@ -46,9 +46,9 @@
                 />
             </template>
             <template v-else-if="activeTab === 1">
-                <MaterialTable :subtitle="'上架中'" :materials="PublishedMaterials" />
-                <MaterialTable :subtitle="'未上架'" :materials="UnpublishedMaterials" />
-                <MaterialTable :subtitle="'未完成'" :materials="IncompleteMaterials" />
+                <MaterialTable :subtitle="'上架中'" :materials="PublishedMaterials.filter(m => m.created_by === UserInfo.id)" />
+                <MaterialTable :subtitle="'未上架'" :materials="UnpublishedMaterials.filter(m => m.created_by === UserInfo.id)" />
+                <MaterialTable :subtitle="'未完成'" :materials="IncompleteMaterials.filter(m => m.created_by === UserInfo.id)" />
             </template>
 
             <v-btn
@@ -133,6 +133,7 @@ export default {
             return history;
         },
         ...mapGetters({
+            UserInfo: 'getUserInfo',
             PermissionName: 'getPermissionName',
             PublishedMaterials: 'getPublishedMaterials',
             UnpublishedMaterials: 'getUnpublishedMaterials',

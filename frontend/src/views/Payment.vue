@@ -18,6 +18,11 @@
                             <div>
                                 <img src="../assets/images/payment_qrcode.jpg" alt="" />
                             </div>
+                            <div style="margin-top: 20px;">
+                                <a href="https://page.cashier.ecpay.com.tw/forms/ggC">
+                                    https://page.cashier.ecpay.com.tw/forms/ggC
+                                </a>
+                            </div>
                         </v-row>
                     </v-card-text>
                 </v-card>
