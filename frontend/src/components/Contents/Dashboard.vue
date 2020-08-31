@@ -92,6 +92,8 @@ export default {
     },
     mounted() {
         this.snackbar = true;
+        this.$store.dispatch('actionFetchOrders');
+        this.$store.dispatch('actionFetchMaterials');
     }
 };
 </script>

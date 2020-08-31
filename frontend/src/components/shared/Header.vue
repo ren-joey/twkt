@@ -30,6 +30,7 @@
             <v-menu offsetY
                     origin="top center"
                     transition="scale-transition"
+                    v-if="false"
             >
                 <template v-slot:activator="{ on }">
                     <v-btn class="mr-2"
@@ -53,6 +54,7 @@
                     offsetY
                     origin="top center"
                     transition="scale-transition"
+                    v-if="false"
             >
                 <template v-slot:activator="{ on }">
                     <v-btn class="mr-2"

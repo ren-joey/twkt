@@ -53,7 +53,7 @@
 
                         <v-row>
                             <v-col
-                                cols="12"
+                                cols="11"
                                 sm="8"
                             >
                                 <v-text-field
@@ -62,6 +62,36 @@
                                     prependIcon="mdi-email"
                                     v-bind="inputAttributes"
                                 />
+                            </v-col>
+                            <v-col cols="1" sm="4">
+                                <v-chip
+                                    class="ma-1"
+                                    small=""
+                                    v-if="!UserInfo.email_verified_at"
+                                >
+                                    <v-icon small>mdi-shield-remove</v-icon>
+                                    未驗證
+                                </v-chip>
+                                <v-chip
+                                    class="ma-1"
+                                    small=""
+                                    v-bind="BadgeColor"
+                                    v-else
+                                >
+                                    <v-icon small>mdi-shield-check</v-icon>
+                                    {{ UserInfo.permission_group.tw_name }}
+                                </v-chip><br />
+                                <v-btn small
+                                       rounded=""
+                                       color="primary"
+                                       v-if="UserInfo.email_verified_at === null"
+                                       :loading="resendEmailFetching === 'Y'"
+                                       :disabled="resendEmailDone === 'Y'"
+                                       @click="resendVerificationEmail"
+                                >
+                                    {{ resendEmailDone === 'Y' ? '已送出' : '重寄驗證信' }}
+                                </v-btn>
+                                <div v-else>已驗證</div>
                             </v-col>
                         </v-row>
 
@@ -329,7 +359,9 @@ export default {
         passwordVisible: 'N',
         notificationEnable: false,
         editUserFetching: 'N',
-        resetPasswordFetching: 'N'
+        resetPasswordFetching: 'N',
+        resendEmailFetching: 'N',
+        resendEmailDone: 'N'
     }),
     computed: {
         inputAttributes() {
@@ -396,6 +428,18 @@ export default {
                 alert(e);
             }).finally(() => {
                 this.resetPasswordFetching = 'N';
+            });
+        },
+        resendVerificationEmail() {
+            if (this.resendEmailFetching === 'Y') return;
+            this.resendEmailFetching = 'Y';
+
+            axios({ url: 'api/email/resend' }).then(() => {
+                this.resendEmailDone = 'Y';
+            }).catch((e) => {
+                alert(e);
+            }).finally(() => {
+                this.resendEmailFetching = 'N';
             });
         }
     }

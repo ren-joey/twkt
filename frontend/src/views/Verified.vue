@@ -2,7 +2,7 @@
     <v-app>
         <Header />
         <Verified />
-        <DialogContact />
+        <!-- <DialogContact /> -->
     </v-app>
 </template>
 

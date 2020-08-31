@@ -67,6 +67,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     data: () => ({
         type: 'month',
@@ -98,10 +100,36 @@ export default {
         colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
         names: ['需求單']
     }),
+    computed: {
+        ...mapGetters({
+            Orders: 'getOrders',
+            Materials: 'getMaterials'
+        })
+    },
+    watch: {
+        Orders() {
+            this.getEvents();
+        }
+    },
     methods: {
         getEvents() {
-        // getEvents({ start, end }) {
-            // const events = [];
+            const events = [];
+
+            this.Orders.forEach((order) => {
+                events.push({
+                    name: `[需求單] ${order.function}`,
+                    start: new Date(order.created_at),
+                    color: 'primary'
+                });
+            });
+
+            this.Materials.forEach((materials) => {
+                events.push({
+                    name: `[原物料] ${materials.name}`,
+                    start: new Date(materials.created_at),
+                    color: 'success'
+                });
+            });
 
             // const min = new Date(`${start.date}T00:00:00`);
             // const max = new Date(`${end.date}T23:59:59`);
@@ -123,7 +151,7 @@ export default {
             //     });
             // }
 
-            // this.events = events;
+            this.events = events;
         },
         getEventColor(event) {
             return event.color;

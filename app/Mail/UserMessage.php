@@ -30,7 +30,7 @@ class UserMessage extends Mailable
      */
     public function build()
     {
-        return $this->subject('您有一筆新的訊息')
+        return $this->subject('您有一筆新通知')
                     ->view('emails.myTestMail');
     }
 }

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserMessage;
 use App\Material;
 use App\Order;
 use App\OrderMaterial;
+use App\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
@@ -45,6 +48,19 @@ class OrderController extends Controller
         $input = $request->toArray();
         $input['created_by'] = $user->id;
         $order = Order::create($input);
+
+        $details = [
+            'title' => '有一筆新的需求單',
+            'body' => $user->name.'新增了一筆需求單 - '.$input['function']
+        ];
+
+        User::all()->each(function ($u) use ($details) {
+            if ($u->permissionGroup->col_name === 'agent'
+                || $u->permissionGroup->col_name === 'admin') {
+                    Mail::to($u->email)->send(new UserMessage($details));
+                }
+        });
+
         // $order->name = $request->input('name');
         // $order->description = $request->input('description');
         // $order->order_details = $request->input('order_details');
@@ -132,6 +148,13 @@ class OrderController extends Controller
                         $orderMaterial->amount = $material_amount;
                         $orderMaterial->save();
                     }
+
+                    $details = [
+                        'title' => '有一筆需求單狀態變更',
+                        'body' => '管理員<'.$user->name.'> 已變更您的需求單內容˙ - '.$order->function
+                    ];
+                    $creator = User::find($order->created_by);
+                    Mail::to($creator->email)->send(new UserMessage($details));
                 }
             }
         throw new AuthenticationException();

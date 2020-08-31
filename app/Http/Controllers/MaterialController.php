@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserMessage;
 use App\Material;
+use App\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class MaterialController extends Controller
@@ -88,6 +91,19 @@ class MaterialController extends Controller
 
                 if (!isset($input['status']) || $permissionName === 'company') $input['status'] = 'edit';
                 $material = Material::create($input);
+
+                $details = [
+                    'title' => '有一筆新的原物料',
+                    'body' => $user->name.'新增了一筆原物料 - '.$input['name']
+                ];
+
+                User::all()->each(function ($u) use ($details) {
+                    if ($u->permissionGroup->col_name === 'agent'
+                        || $u->permissionGroup->col_name === 'admin') {
+                            Mail::to($u->email)->send(new UserMessage($details));
+                        }
+                });
+
                 response($material, Response::HTTP_OK);
             }
             throw new AuthenticationException();

@@ -14,16 +14,14 @@
                         </div>
                     </v-card-title>
                     <v-card-text>
-                        <v-row justify="center">
-                            <div>
-                                <img src="../assets/images/payment_qrcode.jpg" alt="" />
-                            </div>
-                            <div style="margin-top: 20px;">
-                                <a href="https://page.cashier.ecpay.com.tw/forms/ggC">
-                                    https://page.cashier.ecpay.com.tw/forms/ggC
-                                </a>
-                            </div>
-                        </v-row>
+                        <div style="text-align: center;">
+                            <img src="../assets/images/payment_qrcode.jpg" alt="" />
+                        </div>
+                        <div style="margin-top: 20px; text-align: center;">
+                            <a href="https://page.cashier.ecpay.com.tw/forms/ggC">
+                                https://page.cashier.ecpay.com.tw/forms/ggC
+                            </a>
+                        </div>
                     </v-card-text>
                 </v-card>
             </v-container>

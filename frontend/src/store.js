@@ -29,6 +29,7 @@ export default new Vuex.Store({
     },
     getters: {
         getPage: (state) => state.Page,
+        getOrders: (state) => state.Orders,
         getPermissionName: (state) => {
             if (state.UserInfo.is_login === 'N') return 'guest';
             return state.UserInfo.permission_group.col_name;
