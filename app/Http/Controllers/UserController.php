@@ -46,6 +46,7 @@ class UserController extends Controller
         $input['password'] = bcrypt($input['password']);
         $input['user_information_id'] = $userInformation->id;
         $user = User::create($input);
+        $user->sendEmailVerificationNotification();
         $oClient = OClient::where('password_client', 1)->first();
         // return response($user, Response::HTTP_OK);
 
@@ -159,6 +160,7 @@ class UserController extends Controller
 
     public function test()
     {
+        return response([], 200);
         $permissionGroup = PermissionGroup::where('col_name', '=', 'user')->first();
         $userInformation = $permissionGroup->userInformation;
 

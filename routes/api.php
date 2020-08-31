@@ -3,8 +3,10 @@
 use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\UserController;
+use App\Mail\UserMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,3 +83,18 @@ Route::get('get-serial-number', 'LayoutController@getSerialNumber');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('email/verify/{id}', 'VerificationController@verify')->name('verification.verify'); // Make sure to keep this as your route name
+Route::get('email/resend', 'VerificationController@resend')->name('verification.resend');
+
+// Route::get('send-mail', function () {
+
+//     $details = [
+//         'title' => 'Mail from ItSolutionStuff.com',
+//         'body' => 'This is for testing email using smtp'
+//     ];
+
+//     Mail::to('tsuyiren@gmail.com')->send(new UserMessage($details));
+
+//     return response('done', Response::HTTP_OK);
+// });
