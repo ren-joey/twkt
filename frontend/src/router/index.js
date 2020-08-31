@@ -28,6 +28,11 @@ const router = new Router({
             component: () => import('@/views/Login')
         },
         {
+            path: '/verified',
+            name: 'verified',
+            component: () => import('@/views/Verified')
+        },
+        {
             path: '/material/:material_id?',
             name: 'material',
             component: () => import('@/views/Material')
@@ -62,7 +67,8 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     const { UserInfo } = store.state;
-    if (UserInfo === undefined) {
+    if (to.name === 'verified') next();
+    else if (UserInfo === undefined) {
         Promise.all([
             store.dispatch('actionCheckLogin'),
             store.dispatch('actionFetchLayout')

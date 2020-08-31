@@ -7,14 +7,14 @@ module.exports = {
         // port: 4000,
         disableHostCheck: true,
         overlay: {
-            warnings: true,
+            // warnings: true,
             errors: true
         },
         proxy: {
             '/api': {
-                target: 'http://192.168.64.4',
+                // target: 'http://192.168.64.4',
                 // target: 'http://218.161.122.79',
-                // target: 'http://127.0.0.1',
+                target: 'http://127.0.0.1',
                 secure: false,
                 changeOrigin: true
             }

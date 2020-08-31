@@ -21,5 +21,6 @@
     "LOGIN_EMAIL_RULE_2": "E-mail must be valid",
     "LOGIN_PW_RULE_1": "Password is required",
     "LOGIN_PW_RULE_2": "At least 6 characters",
-    "CONFIRM": "確定"
+    "CONFIRM": "確定",
+    "VERIFIED_EMAIL": "您的email已認證完成"
 }

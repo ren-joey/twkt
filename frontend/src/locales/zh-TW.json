@@ -21,5 +21,6 @@
     "LOGIN_EMAIL_RULE_2": "必須是有效的E-mail",
     "LOGIN_PW_RULE_1": "密碼 不可空白",
     "LOGIN_PW_RULE_2": "密碼 至少需6個字元",
-    "CONFIRM": "確定"
+    "CONFIRM": "確定",
+    "VERIFIED_EMAIL": "您的email已認證完成"
 }
