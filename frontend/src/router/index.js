@@ -43,6 +43,11 @@ const router = new Router({
             component: () => import('@/views/Order')
         },
         {
+            path: '/quotation/:quotation_id?',
+            name: 'quotation',
+            component: () => import('@/views/Quotation')
+        },
+        {
             path: '/user/:user_id?',
             name: 'user',
             component: () => import('@/views/User')

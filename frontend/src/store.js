@@ -21,15 +21,23 @@ export default new Vuex.Store({
             actionLogout: 'N',
             actionFetchMaterials: 'N',
             actionFetchUsers: 'N',
-            actionFetchLayout: 'N'
+            actionFetchLayout: 'N',
+            actionFetchQuotations: 'N'
         },
         Materials: [],
         Users: [],
-        Orders: []
+        Orders: [],
+        Quotations: []
     },
     getters: {
         getPage: (state) => state.Page,
         getOrders: (state) => state.Orders,
+
+        getQuotations: (state) => state.Quotations,
+        getQuotationById: (state) => (id) => state.Quotations.find((q) => q.id === id),
+        getIncompleteQuotations: (state) => state.Quotations.filter((q) => q.status !== 'complete'),
+        getCompleteQuotations: (state) => state.Quotations.filter((q) => q.status === 'complete'),
+
         getPermissionName: (state) => {
             if (state.UserInfo.is_login === 'N') return 'guest';
             return state.UserInfo.permission_group.col_name;
@@ -120,7 +128,8 @@ export default new Vuex.Store({
         setFetching: (state, obj) => { state.Fetching[obj.name] = obj.status; },
         setMaterials: (state, arr) => { state.Materials = arr; },
         setUsers: (state, arr) => { state.Users = arr; },
-        setOrders: (state, arr) => { state.Orders = arr; }
+        setOrders: (state, arr) => { state.Orders = arr; },
+        setQuotations: (state, arr) => { state.Quotations = arr; }
     },
     actions: {
         actionCheckLogin: ({ state, commit }) => new Promise((resolve, reject) => {
@@ -245,6 +254,24 @@ export default new Vuex.Store({
                 url: 'api/orders'
             }).then((res) => {
                 commit('setOrders', res.data);
+                resolve(res.data);
+            }).catch((e) => {
+                alert(e);
+                reject();
+            }).finally(() => {
+                commit('setFetching', { name, status: 'N' });
+            });
+        }),
+        actionFetchQuotations: ({ state, commit }) => new Promise((resolve, reject) => {
+            const name = 'actionFetchQuotations';
+            if (state.Fetching[name] === 'Y') reject();
+            commit('setFetching', { name, status: 'Y' });
+
+            axios({
+                method: 'GET',
+                url: 'api/quotations'
+            }).then((res) => {
+                commit('setQuotations', res.data);
                 resolve(res.data);
             }).catch((e) => {
                 alert(e);

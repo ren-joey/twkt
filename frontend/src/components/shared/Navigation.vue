@@ -191,6 +191,14 @@ export default {
                     }
                 },
                 {
+                    icon: 'mdi-cash-check',
+                    text: '詢價單管理',
+                    permission: this.PermissionName !== 'user' ? 'Y' : 'N',
+                    to: {
+                        name: 'quotation'
+                    }
+                },
+                {
                     icon: 'mdi-account',
                     text: '客戶管理',
                     permission: this.PermissionName === 'admin' || this.PermissionName === 'agent' ? 'Y' : 'N',

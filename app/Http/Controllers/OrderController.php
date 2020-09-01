@@ -6,6 +6,7 @@ use App\Mail\UserMessage;
 use App\Material;
 use App\Order;
 use App\OrderMaterial;
+use App\Quotation;
 use App\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
@@ -24,10 +25,10 @@ class OrderController extends Controller
         if ($permissionName === 'agent'
         || $permissionName === 'admin')
         {
-            return response(Order::cursor(), Response::HTTP_OK);
+            return response(Order::with('quotations')->get(), Response::HTTP_OK);
         }
 
-        $orders = Order::where('created_by', '=', $user->id)->cursor();
+        $orders = Order::where('created_by', '=', $user->id)->with('quotations')->get();
         return response($orders, Response::HTTP_OK);
     }
 
@@ -36,7 +37,7 @@ class OrderController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            'function' => 'required|max:32',
+            'function' => 'required|max:128',
             'dosage_form' => 'required|max:32',
             'package' => 'required|max:32'
         ]);
@@ -97,6 +98,7 @@ class OrderController extends Controller
         $user = Auth::user();
         $permissionName = $user->permissionGroup->col_name;
         $order = Order::find($order_id);
+        $order->quotations;
 
         if (!$order) return response([], Response::HTTP_NO_CONTENT);
 
@@ -106,6 +108,7 @@ class OrderController extends Controller
                 $order->orderMaterials->each(function ($orderMaterial) {
                     $orderMaterial->material;
                 });
+                $order->quotations;
                 return response($order, Response::HTTP_OK);
         }
         throw new AuthenticationException();
@@ -124,7 +127,7 @@ class OrderController extends Controller
             || $permissionName === 'admin')
             {
                 // $order->update($request->only(['name', 'description', 'order_details']));
-                $order->update($request->all());
+                $order->update($request->except(['id', 'created_by', 'created_at', 'update_at', 'quotations']));
                 $order->orderMaterials->each(function ($orderMaterial){
                     $orderMaterial->delete();
                 });
@@ -147,12 +150,35 @@ class OrderController extends Controller
                         $orderMaterial->order_id = $order->id;
                         $orderMaterial->amount = $material_amount;
                         $orderMaterial->save();
+
+                        if ($request->status === 'quoting') {
+                            $quotation = new Quotation;
+                            $quotation->status = 'quoting';
+                            $quotation->order_id = $order->id;
+                            $quotation->material_id = $material->id;
+                            $quotation->created_by = $user->id;
+                            $quotation->save();
+
+                            $details = [
+                                'title' => '有一筆新的詢價單',
+                                'body' => '管理員<'.$user->name.'> 新增了一筆原料詢價單 - '.$material->name
+                            ];
+                            $creator = User::find($material->created_by);
+                            Mail::to($creator->email)->send(new UserMessage($details));
+                        }
                     }
 
-                    $details = [
-                        'title' => '有一筆需求單狀態變更',
-                        'body' => '管理員<'.$user->name.'> 已變更您的需求單內容˙ - '.$order->function
-                    ];
+                    if ($request->status === 'complete') {
+                        $details = [
+                            'title' => '您得需求單已經生效',
+                            'body' => '管理員<'.$user->name.'> 已經將您的需求單詢價完成並且生效 - '.$order->function
+                        ];
+                    } else {
+                        $details = [
+                            'title' => '有一筆需求單狀態變更',
+                            'body' => '管理員<'.$user->name.'> 已變更您的需求單內容˙ - '.$order->function
+                        ];
+                    }
                     $creator = User::find($order->created_by);
                     Mail::to($creator->email)->send(new UserMessage($details));
                 }

@@ -23,6 +23,11 @@ class Order extends Model
         return $this->hasMany('App\OrderMaterial');
     }
 
+    public function quotations()
+    {
+        return $this->hasMany('App\Quotation');
+    }
+
     // 將輸出的 timestamp 統一格式化
     protected function serializeDate(DateTimeInterface $date)
     {

@@ -55,6 +55,9 @@ Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function(
     Route::patch('order/to-step/{order_id}', 'OrderController@to');
     Route::delete('order/{order_id}', 'OrderController@delete');
 
+    Route::get('quotations', 'QuotationController@all');
+    Route::patch('quotation/{quotation_id}', 'QuotationController@update');
+
     Route::get('comments/by-order/{order_id?}', 'CommentController@byOrder');
     Route::get('comments/by-material/{material_id?}', 'CommentController@byMaterial');
     Route::get('comments/by-quotation/{quotation_id?}', 'CommentController@byQuotation');

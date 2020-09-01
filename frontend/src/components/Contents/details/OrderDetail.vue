@@ -184,7 +184,7 @@
                                 </v-simple-table>
                             </v-col>
 
-                            <v-col cols="12" v-if="PermissionName === 'agent' || PermissionName === 'admin'">
+                            <v-col cols="12" v-if="PermissionName === 'agent' || PermissionName === 'admin' && order.status === 'verify'">
                                 <v-btn text
                                        xLarge
                                        block
@@ -223,12 +223,19 @@
                                    color="success"
                                    xLarge
                                    :loading="submitFetching === 'Y'"
-                                   v-if="order.status === 'verify'
-                                       && (PermissionName === 'admin'
-                                           || PermissionName === 'agent')"
+                                   v-if="isSaveBtnVisible === 'Y'"
                                    @click="save"
                             >
                                 <v-icon left>mdi-send</v-icon> 審核完成並詢價
+                            </v-btn>
+                            <v-btn class="ma-2"
+                                   color="success"
+                                   xLarge
+                                   :loading="submitFetching === 'Y'"
+                                   v-else-if="isQuotationAllCompleted === 'Y'"
+                                   @click="complete"
+                            >
+                                <v-icon left>mdi-send</v-icon> 完成需求單
                             </v-btn>
                         </div>
                     </v-container>
@@ -306,6 +313,82 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+
+        <v-card
+            class="mx-auto my-4"
+            maxWidth="800"
+            v-for="(quotation, idx) in order.quotations"
+            :key="idx"
+        >
+            <v-card-title class="headline d-flex justify-space-between align-center">
+                <div class="d-flex align-center">
+                    詢價單
+                    <v-chip class="ma-2"
+                            small
+                            color="success"
+                            v-if="quotation.status === 'complete'"
+                    >
+                        已完成
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            outlined
+                            color="success"
+                            v-else-if="quotation.status === 'quoting'"
+                    >
+                        報價中
+                    </v-chip>
+                    <v-chip class="ma-2"
+                            small
+                            color="red"
+                            textColor="white"
+                            v-else-if="quotation.status === 'verify'"
+                    >
+                        審核中
+                    </v-chip>
+                </div>
+            </v-card-title>
+            <v-card-text>
+                <v-divider />
+                <v-form>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12" sm="8">
+                                <v-text-field
+                                    :value="getMaterialById(quotation.material_id).name"
+                                    hideDetails
+                                    label="原物料名稱"
+                                    dense
+                                    v-bind="inputAttributes"
+                                />
+                            </v-col>
+                            <v-col cols="12" sm="8">
+                                <v-text-field
+                                    :value="quotation.price"
+                                    hideDetails
+                                    :label="`報價 (${quotation.currency})`"
+                                    dense
+                                    v-bind="inputAttributes"
+                                />
+                            </v-col>
+                        </v-row>
+                        <!-- <div class="d-flex justify-center">
+                            <v-btn class="ma-2"
+                                   color="success"
+                                   xLarge
+                                   :loading="submitFetching === 'Y'"
+                                   v-if="order.status === 'verify'
+                                       && (PermissionName === 'admin'
+                                           || PermissionName === 'agent')"
+                                   @click="save"
+                            >
+                                <v-icon left>mdi-send</v-icon> 審核完成並詢價
+                            </v-btn>
+                        </div> -->
+                    </v-container>
+                </v-form>
+            </v-card-text>
+        </v-card>
     </div>
 </template>
 
@@ -339,6 +422,22 @@ export default {
         selectMaterialDialog: false
     }),
     computed: {
+        isQuotationAllCompleted() {
+            const { order } = this;
+            let status = 'Y';
+            if (order.status !== 'quoting') status = 'N';
+            order.quotations.forEach((q) => { // eslint-disable-line
+                if (q.status !== 'complete') status = 'N';
+            });
+            return status;
+        },
+        isSaveBtnVisible() {
+            const { order, PermissionName } = this;
+            if (order.status === 'verify'
+                    && (PermissionName === 'admin'
+                        || PermissionName === 'agent')) return 'Y';
+            return 'N';
+        },
         inputAttributes() {
             return [
                 { disabled: this.inputDisabled },
@@ -355,7 +454,8 @@ export default {
         },
         ...mapGetters({
             Columns: 'getOrderColumns',
-            PermissionName: 'getPermissionName'
+            PermissionName: 'getPermissionName',
+            getMaterialById: 'getMaterialById'
         })
     },
     mounted() {
@@ -388,6 +488,7 @@ export default {
             this.selectMaterialDialog = false;
         },
         deleteMaterial(idx) {
+            if (this.order.status !== 'verify') return;
             this.selectedMaterials.splice(idx, 1);
         },
         validation() {
@@ -429,6 +530,16 @@ export default {
                     order_details,
                     status: 'quoting'
                 }
+            }).then(() => {
+                this.$store.dispatch('actionFetchOrders');
+                this.$router.push({ name: 'order' });
+            });
+        },
+        complete() {
+            axios({
+                method: 'patch',
+                url: `/api/order/${this.order.id}`,
+                params: { status: 'complete' }
             }).then(() => {
                 this.$store.dispatch('actionFetchOrders');
                 this.$router.push({ name: 'order' });
