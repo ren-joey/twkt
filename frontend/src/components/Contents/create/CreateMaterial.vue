@@ -47,7 +47,7 @@
                                 <v-text-field
                                     v-model="material[col.col_name]"
                                     hideDetails
-                                    :label="col.tw_name"
+                                    :label="`${col.tw_name}${col.required === 'Y' ? '*' : ''}`"
                                     :placeholder="col.description"
                                     dense
                                     v-bind="inputAttributes"
@@ -58,7 +58,7 @@
                                 <div class="checkbox-group">
                                     <div class="text-subtitle-1 mb-4">
                                         <div class="label-primary" />
-                                        <span>{{ col.tw_name }}</span>
+                                        <span>{{ col.tw_name }}{{ col.required === 'Y' ? '*' : '' }}</span>
                                     </div>
                                     <v-divider />
                                     <v-row class="px-4">
@@ -76,7 +76,7 @@
                             <v-col cols="12" v-else-if="col.type === 'radio'">
                                 <div class="radio-group">
                                     <div class="text-subtitle-1 mb-4">
-                                        {{ col.tw_name }}
+                                        <span>{{ col.tw_name }}{{ col.required === 'Y' ? '*' : '' }}</span>
                                     </div>
                                     <v-divider />
                                     <v-row class="px-4">
@@ -99,7 +99,7 @@
                                         :items="col.col_option.split(',')"
                                         v-bind="inputAttributes"
                                         hideDetails
-                                        :label="col.tw_name"
+                                        :label="`${col.tw_name}${col.required === 'Y' ? '*' : ''}`"
                                         v-model="material[col.col_name]"
                                     />
                                 </v-row>
@@ -251,6 +251,16 @@ export default {
                 alert('請選擇原物料分類，並取得流水號。');
                 return;
             }
+
+            for (let i = 0; i < this.Columns.length; i += 1) {
+                const c = this.Columns[i];
+                if (c.required === 'Y'
+                    && (!this.material[c.col_name] || this.material[c.col_name].length === 0)) {
+                    alert(`您輸入的資料有誤，${c.tw_name}為必填欄位。`);
+                    return;
+                }
+            }
+
             if (this.submitFetching === 'Y') return;
             this.submitFetching = 'Y';
 
