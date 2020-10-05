@@ -3,12 +3,13 @@
         <v-sheet
             tile
             height="54"
-            color="grey lighten-3"
+            :color="BadgeColor.color"
             class="d-flex"
         >
             <v-btn
                 icon
                 class="ma-2"
+                :dark="isDarkTheme"
                 @click="$refs.calendar.prev()"
             >
                 <v-icon>mdi-chevron-left</v-icon>
@@ -17,6 +18,7 @@
             <v-select
                 v-model="type"
                 :items="types"
+                :dark="isDarkTheme"
                 dense
                 outlined
                 hideDetails
@@ -45,6 +47,7 @@
             <v-btn
                 icon
                 class="ma-2"
+                :dark="isDarkTheme"
                 @click="$refs.calendar.next()"
             >
                 <v-icon>mdi-chevron-right</v-icon>
@@ -101,9 +104,19 @@ export default {
         names: ['需求單']
     }),
     computed: {
+        isDarkTheme() {
+            return true;
+            // const { PermissionName } = this;
+            // if (PermissionName === 'guest'
+            //     || PermissionName === 'user'
+            //     || PermissionName === 'company') return true;
+            // return false;
+        },
         ...mapGetters({
             Orders: 'getOrders',
-            Materials: 'getMaterials'
+            Materials: 'getMaterials',
+            PermissionName: 'getPermissionName',
+            BadgeColor: 'getOwnBadgeColor'
         })
     },
     watch: {
