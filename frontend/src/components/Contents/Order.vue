@@ -37,6 +37,8 @@
                 <OrderDetail :order="$store.getters.getOrderById(+$route.params.order_id)"
                              :publishedMaterials="publishedMaterials"
                 />
+
+                <Comment />
             </template>
         </v-container>
     </v-main>
@@ -49,10 +51,11 @@ import bus from '@/bus';
 import OrderTable from './tables/OrderTable';
 import OrderDetail from './details/OrderDetail';
 import CreateOrder from './create/CreateOrder';
+import Comment from '../Dialog/Comment';
 
 export default {
     components: {
-        OrderTable, OrderDetail, CreateOrder
+        OrderTable, OrderDetail, CreateOrder, Comment
     },
     data: () => ({
         bus,

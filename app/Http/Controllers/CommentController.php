@@ -92,8 +92,7 @@ class CommentController extends Controller
                 $comment->order_id = $order->id;
                 $comment->content = $request->content;
                 $comment->save();
-            }
-            throw new AuthenticationException();
+            } else throw new AuthenticationException();
         }
         else if ($request->has('material_id'))
         {
@@ -112,8 +111,7 @@ class CommentController extends Controller
                 $comment->material_id = $material->id;
                 $comment->content = $request->content;
                 $comment->save();
-            }
-            throw new AuthenticationException();
+            } else throw new AuthenticationException();
         }
         else if ($request->has('quotation_id'))
         {
@@ -132,13 +130,12 @@ class CommentController extends Controller
                 $comment->quotation_id = $quotation->id;
                 $comment->content = $request->content;
                 $comment->save();
-            }
-            throw new AuthenticationException();
-        }
-
-        return response([
+            } else throw new AuthenticationException();
+        } else return response([
             'message' => '未指定正確的回應主體'
         ], Response::HTTP_BAD_REQUEST);
+
+        return response($comment, Response::HTTP_OK);
     }
 
     public function update(Request $request, $comment_id)

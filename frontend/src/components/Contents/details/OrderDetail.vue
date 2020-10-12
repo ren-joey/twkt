@@ -45,6 +45,15 @@
                         編輯
                     </v-chip>
                 </div>
+                <div class="ml-auto">
+                    <v-icon
+                        large
+                        color="blue darken-2"
+                        @click="showComments({ order_id: order.id })"
+                    >
+                        mdi-message-text
+                    </v-icon>
+                </div>
             </v-card-title>
             <v-card-text>
                 <v-divider />
@@ -347,6 +356,15 @@
                         審核中
                     </v-chip>
                 </div>
+                <div class="ml-auto">
+                    <v-icon
+                        large
+                        color="blue darken-2"
+                        @click="showComments({ quotation_id: quotation.id })"
+                    >
+                        mdi-message-text
+                    </v-icon>
+                </div>
             </v-card-title>
             <v-card-text>
                 <v-divider />
@@ -395,6 +413,7 @@
 <script>
 import axios from 'axios';
 import { mapGetters } from 'vuex';
+import bus from '@/bus';
 
 export default {
     props: {
@@ -479,6 +498,9 @@ export default {
         this.$nextTick(() => { this.dataPrepare = 'Y'; });
     },
     methods: {
+        showComments(obj) {
+            bus.$emit('showComments', obj);
+        },
         selectMaterialCancel() {
             this.selectedMaterialsTemp = [];
             this.selectMaterialDialog = false;
