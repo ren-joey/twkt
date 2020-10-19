@@ -31,6 +31,19 @@
                         審核中
                     </v-chip>
                 </div>
+                <div class="ml-auto"
+                     v-if="PermissionName === 'agent' || PermissionName === 'admin'
+                         || quotation.material.created_by === UserInfo.id
+                     "
+                >
+                    <v-icon
+                        large
+                        color="blue darken-2"
+                        @click="showComments({ quotation_id: quotation.id })"
+                    >
+                        mdi-message-text
+                    </v-icon>
+                </div>
             </v-card-title>
             <v-card-text>
                 <v-divider />
@@ -78,6 +91,7 @@
 
 <script>
 import axios from 'axios';
+import bus from '@/bus';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -124,6 +138,9 @@ export default {
         this.$nextTick(() => { this.dataPrepare = 'Y'; });
     },
     methods: {
+        showComments(obj) {
+            bus.$emit('showComments', obj);
+        },
         selectMaterialCancel() {
             this.selectedMaterialsTemp = [];
             this.selectMaterialDialog = false;

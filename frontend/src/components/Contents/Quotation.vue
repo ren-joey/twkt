@@ -13,6 +13,8 @@
             </template>
             <template v-else>
                 <QuotationDetail :quotation="$store.getters.getQuotationById(+$route.params.quotation_id)" />
+
+                <Comment />
             </template>
         </v-container>
     </v-main>
@@ -23,10 +25,11 @@ import { mapGetters } from 'vuex';
 import bus from '@/bus';
 import QuotationTable from './tables/QuotationTable';
 import QuotationDetail from './details/QuotationDetail';
+import Comment from '../Dialog/Comment';
 
 export default {
     components: {
-        QuotationTable, QuotationDetail
+        QuotationTable, QuotationDetail, Comment
     },
     data: () => ({
         bus

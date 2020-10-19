@@ -74,6 +74,8 @@
             </v-breadcrumbs>
 
             <MaterialDetail />
+
+            <Comment />
         </v-container>
 
         <template v-slot:prepend>
@@ -101,10 +103,11 @@ import MaterialCategoryTable from './tables/MaterialCategoryTable';
 import MaterialTable from './tables/MaterialTable';
 import MaterialDetail from './details/MaterialDetail';
 import CreateMaterial from './create/CreateMaterial';
+import Comment from '../Dialog/Comment';
 
 export default {
     components: {
-        DialogAddMaterial, MaterialCategoryTable, MaterialTable, MaterialDetail, CreateMaterial
+        DialogAddMaterial, MaterialCategoryTable, MaterialTable, MaterialDetail, CreateMaterial, Comment
     },
     data: () => ({
         bus,

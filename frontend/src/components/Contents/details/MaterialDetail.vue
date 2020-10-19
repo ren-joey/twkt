@@ -8,6 +8,20 @@
                 <div class="d-flex align-center">
                     原物料資料
                 </div>
+                <div class="ml-auto"
+                     v-if="PermissionName === 'agent'
+                         || PermissionName === 'admin'
+                         || (UserInfo.id === materialOrigin.created_by)
+                     "
+                >
+                    <v-icon
+                        large
+                        color="blue darken-2"
+                        @click="showComments({ material_id: materialOrigin.id })"
+                    >
+                        mdi-message-text
+                    </v-icon>
+                </div>
             </v-card-title>
             <v-card-text>
                 <v-divider />
@@ -197,6 +211,9 @@ export default {
         this.fetchMaterialData();
     },
     methods: {
+        showComments(obj) {
+            bus.$emit('showComments', obj);
+        },
         fetchMaterialData() {
             axios({
                 method: 'GET',

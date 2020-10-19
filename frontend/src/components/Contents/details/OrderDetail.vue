@@ -356,7 +356,7 @@
                         審核中
                     </v-chip>
                 </div>
-                <div class="ml-auto">
+                <div class="ml-auto" v-if="PermissionName === 'admin' || PermissionName === 'agent'">
                     <v-icon
                         large
                         color="blue darken-2"
