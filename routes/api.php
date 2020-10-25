@@ -65,6 +65,9 @@ Route::group(['middleware' => ['CheckClientCredentials', 'auth:api']], function(
     Route::delete('comment/{comment_id}', 'CommentController@delete');
     Route::post('comment', 'CommentController@create');
 
+    Route::get('user-notifications', 'UserNotificationController@all');
+    Route::get('user-notification/read/{id}', 'UserNotificationController@read');
+
     Route::get('users', 'UserController@all');
     Route::get('user/{id?}', 'UserController@get');
     Route::post('user/{id?}', 'UserController@userPassword'); // update user password

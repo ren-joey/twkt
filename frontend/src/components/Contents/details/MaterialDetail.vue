@@ -175,6 +175,9 @@ export default {
         editMaterialFetching: 'N'
     }),
     computed: {
+        materialId() {
+            return this.$route.params.material_id;
+        },
         categories() {
             return this.Categories.map((cate) => ({
                 name: `${cate.serial_number} ${cate.tw_name}`,
@@ -205,6 +208,9 @@ export default {
     watch: {
         dialog(val) {
             if (!val) this.close();
+        },
+        materialId() {
+            this.fetchMaterialData();
         }
     },
     mounted() {

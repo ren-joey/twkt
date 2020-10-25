@@ -8,6 +8,7 @@ use App\Order;
 use App\OrderMaterial;
 use App\Quotation;
 use App\User;
+use App\UserNotification;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -55,10 +56,15 @@ class OrderController extends Controller
             'body' => $user->name.'新增了一筆需求單 - '.$input['function']
         ];
 
-        User::all()->each(function ($u) use ($details) {
+        User::all()->each(function ($u) use ($details, $order) {
             if ($u->permissionGroup->col_name === 'agent'
                 || $u->permissionGroup->col_name === 'admin') {
                     Mail::to($u->email)->send(new UserMessage($details));
+                    $notification = new UserNotification();
+                    $notification->content = $details['body'];
+                    $notification->user_id = $u->id;
+                    $notification->url = '/order/detail/'.$order->id;
+                    $notification->save();
                 }
         });
 
@@ -165,6 +171,11 @@ class OrderController extends Controller
                             ];
                             $creator = User::find($material->created_by);
                             Mail::to($creator->email)->send(new UserMessage($details));
+                            $notification = new UserNotification;
+                            $notification->content = $details['body'];
+                            $notification->user_id = $creator->id;
+                            $notification->url = '/quotation/'.$quotation->id;
+                            $notification->save();
                         }
                     }
 
@@ -181,6 +192,11 @@ class OrderController extends Controller
                     }
                     $creator = User::find($order->created_by);
                     Mail::to($creator->email)->send(new UserMessage($details));
+                    $notification = new UserNotification;
+                    $notification->content = $details['body'];
+                    $notification->user_id = $creator->id;
+                    $notification->url = '/order/detail/'.$quotation->id;
+                    $notification->save();
                 }
             }
         throw new AuthenticationException();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\UserMessage;
 use App\Quotation;
 use App\User;
+use App\UserNotification;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -51,10 +52,15 @@ class QuotationController extends Controller
                     'title' => '有一筆報價單已經完成報價',
                     'body' => '原料商<'.$user->name.'> 已經完成報價 - '.$quotation->material->name
                 ];
-                User::all()->each(function ($u) use ($details) {
+                User::all()->each(function ($u) use ($details, $quotation) {
                     if ($u->permissionGroup->col_name === 'agent'
                         || $u->permissionGroup->col_name === 'admin') {
                             Mail::to($u->email)->send(new UserMessage($details));
+                            $notification = new UserNotification();
+                            $notification->content = $details['body'];
+                            $notification->user_id = $u->id;
+                            $notification->url = '/material/'.$quotation->id;
+                            $notification->save();
                         }
                 });
             } else if ($request->status === 'complete') {
@@ -64,6 +70,11 @@ class QuotationController extends Controller
                 ];
                 $creator = User::find($quotation->material->created_by);
                 Mail::to($creator->email)->send(new UserMessage($details));
+                $notification = new UserNotification;
+                $notification->content = $details['body'];
+                $notification->user_id = $creator->id;
+                $notification->url = '/quotation/'.$quotation->id;
+                $notification->save();
             }
         } else throw new AuthenticationException();
     }

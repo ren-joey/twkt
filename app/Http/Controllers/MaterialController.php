@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\UserMessage;
 use App\Material;
 use App\User;
+use App\UserNotification;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -97,10 +98,15 @@ class MaterialController extends Controller
                     'body' => $user->name.'新增了一筆原物料 - '.$input['name']
                 ];
 
-                User::all()->each(function ($u) use ($details) {
+                User::all()->each(function ($u) use ($details, $material) {
                     if ($u->permissionGroup->col_name === 'agent'
                         || $u->permissionGroup->col_name === 'admin') {
                             Mail::to($u->email)->send(new UserMessage($details));
+                            $notification = new UserNotification;
+                            $notification->content = $details['body'];
+                            $notification->user_id = $u->id;
+                            $notification->url = '/material/'.$material->id;
+                            $notification->save();
                         }
                 });
 

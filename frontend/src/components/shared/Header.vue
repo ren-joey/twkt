@@ -50,29 +50,42 @@
                     </v-list-item>
                 </v-list>
             </v-menu>
-            <v-menu openOnHover
+            <v-menu v-model="notificationsToggle"
                     offsetY
-                    origin="top center"
+                    offsetX
+                    origin="right top"
                     transition="scale-transition"
-                    v-if="false"
             >
                 <template v-slot:activator="{ on }">
                     <v-btn class="mr-2"
                            icon
                            v-on="on"
                     >
-                        <v-badge color="pink" dot>
+                        <v-badge v-if="isAllNotificationsReaded === 'N'"
+                                 color="red"
+                                 dot
+                        >
                             <v-icon>mdi-bell</v-icon>
                         </v-badge>
+                        <v-icon v-else>mdi-bell</v-icon>
                     </v-btn>
                 </template>
                 <v-list dense>
                     <v-list-item
-                        v-for="n in 5"
-                        :key="n"
-                        @click="() => {}"
+                        v-for="n in notifications"
+                        :key="n.id"
+                        :to="n.url"
+                        @click="fetchReadNotification(n)"
                     >
-                        <v-list-item-title>Option {{ n }}</v-list-item-title>
+                        <v-badge
+                            v-if="n.read === 'N'"
+                            inline
+                            color="red"
+                            dot
+                        />
+                        <v-list-item-title>
+                            {{ n.content }}
+                        </v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -97,17 +110,70 @@
 <script>
 import { mapGetters } from 'vuex';
 import bus from '@/bus';
+import axios from 'axios';
 
 export default {
+    data() {
+        return {
+            notificationsToggle: false,
+            notifications: []
+        };
+    },
     computed: {
+        isAllNotificationsReaded() {
+            const n = this.notifications.filter((notification) => notification.read === 'N');
+            if (n.length === 0) return 'Y';
+            return 'N';
+        },
         ...mapGetters({
+            Materials: 'getMaterials',
+            Orders: 'getOrders',
+            Quotations: 'getQuotations',
             UserInfo: 'getUserInfo',
             BarColor: 'getBarColor'
         })
     },
+    watch: {
+        UserInfo: {
+            handler(obj) {
+                if (obj && obj.is_login === 'Y') this.fetchNotifications();
+            },
+            deep: true,
+            immediate: true
+        },
+        Materials() {
+            this.fetchNotifications();
+        },
+        Orders() {
+            this.fetchNotifications();
+        },
+        Quotations() {
+            this.fetchNotifications();
+        },
+        notificationsToggle(bool) {
+            if (bool === true) this.fetchNotifications();
+        }
+    },
     methods: {
         toggleNavigation() {
             bus.$emit('toggleNavigation');
+        },
+        fetchNotifications() {
+            axios({
+                method: 'GET',
+                url: 'api/user-notifications'
+            }).then((res) => {
+                this.notifications = res.data;
+            });
+        },
+        fetchReadNotification(n) {
+            if (n.read === 'Y') return;
+            axios({
+                method: 'GET',
+                url: `api/user-notification/read/${n.id}`
+            }).then((res) => {
+                this.notifications = res.data;
+            });
         }
     }
 };
