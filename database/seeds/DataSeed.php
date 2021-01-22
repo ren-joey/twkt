@@ -150,7 +150,7 @@ class DataSeed {
         ['col_name' => 'function','tw_name' => '功能','col_option' => '生髮,腦力,視力,口腔,骨骼,心肺,肝臟,心血管,血糖,血壓,血脂,腸胃,睡眠,抗壓/紓壓,免疫力,抗過敏,抗癌,抗發炎,抗氧化,男性功能,女性功能,攝護腺,女性泌尿道,生理期/更年期,體重控制,排便,皮膚美容,美白,除臭,增加吸收率,兒童,銀髮族,抗沾黏,其它','type' => 'checkbox'],
         ['col_name' => 'allergen','tw_name' => '原料來源含有過敏原','col_option' => '無,奶類及其製品,蛋類及其製品,魚類及其製品,甲殼類及其製品,大豆類及其製品,堅果類及其製品,花生及其製品,芝麻及其製品,芒果及其製品,含麩質之穀物其製品','type' => 'radio'],
         ['col_name' => 'feature','tw_name' => '原料特性','col_option' => '水溶,油溶,怕光,怕熱,酸鹼,其它','type' => 'checkbox'],
-        ['col_name' => 'process','tw_name' => '加工製程','col_option' => '','type' => 'text'],
+        ['col_name' => 'process','tw_name' => '加工製程(食品查驗登記使用)','col_option' => '','type' => 'text'],
         ['col_name' => 'dosage_form','tw_name' => '適用劑型','col_option' => '粉包,硬膠囊,軟膠囊,打錠,水劑,其它','type' => 'checkbox'],
         ['col_name' => 'list','tw_name' => '可供食品使用原料彙整一覽表 (依衛生福利部食品藥物管理)','col_option' => '草、木本植物類 (1),草、木本植物類 (2),草、木本植物類來源製取之原料,藻類及其來源製取之原料,菇蕈類,微生物及其來源製取之原料,海洋動物、水產類、爬蟲類及其來源製取之原料,禽、畜類及其來源製取之原料,其它','type' => 'select'],
         ['col_name' => 'gov_limit','tw_name' => '衛福部法規限制','col_option' => '','type' => 'text'],

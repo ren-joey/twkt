@@ -31,7 +31,7 @@
                             <v-col cols="6">
                                 <v-text-field
                                     v-model="material.serial_number"
-                                    label="流水號 (系統自動生成)"
+                                    label="編號 (系統自動生成)"
                                     hideDetails
                                     disabled
                                     dense
